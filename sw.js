@@ -31,7 +31,7 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       }).catch(() => {
-        if (event.request.mode === 'navigate') return caches.match('./index.html');
+        if (event.request.mode === 'navigate') return caches.match('/To-Do-List/index.html');
         return caches.match(event.request);
       });
     })
