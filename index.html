@@ -921,16 +921,25 @@ textarea{min-height:72px;line-height:1.5}
 <!-- ══ RETRO ══ -->
 <div class="page" id="p-retro">
   <div class="ph"><div class="pe">Nhìn lại</div><div class="pt">Weekly Retrospective</div><div class="pd">20–30 phút tối Chủ nhật. Nhìn lại → rút bài học → điều chỉnh.</div><div class="ftags"><span class="tag tc">Weekly Review — David Allen</span><span class="tag tt">Self-reflection Research</span></div></div>
-  <div class="retro-grid">
-    <div class="retro-card"><div class="retro-icon">✓</div><div class="retro-q">Tuần này tôi đã đạt được?</div><textarea id="r-win" placeholder="Liệt kê win, dù nhỏ..."></textarea></div>
-    <div class="retro-card"><div class="retro-icon">△</div><div class="retro-q">Điều chưa như ý? Vì sao?</div><textarea id="r-miss" placeholder="Phân tích nguyên nhân..."></textarea></div>
-    <div class="retro-card"><div class="retro-icon">→</div><div class="retro-q">Tuần tới làm khác gì?</div><textarea id="r-next" placeholder="1 thay đổi cụ thể..."></textarea></div>
-    <div class="retro-card"><div class="retro-icon">⚡</div><div class="retro-q">Mức năng lượng trung bình</div>
-      <div class="mood-row" style="padding:6px 0"><input type="range" min="1" max="10" value="7" id="r-energy" oninput="document.getElementById('r-ev').textContent=this.value;save()"><span class="mood-val" id="r-ev">7</span></div>
-      <textarea id="r-enote" placeholder="Ghi chú..."></textarea>
+  <div class="journal-nav" style="margin-bottom:20px">
+    <button class="jnav-btn" onclick="retroMove(-1)">← Tuần trước</button>
+    <div>
+      <div class="jdate" id="retro-week-label"></div>
+      <div style="font-size:12px;color:var(--t3);margin-top:1px" id="retro-week-range"></div>
     </div>
-    <div class="retro-card"><div class="retro-icon">🎯</div><div class="retro-q">Đang đi đúng hướng chưa?</div><textarea id="r-align" placeholder="Nhìn lại OKR, WOOP..."></textarea></div>
-    <div class="retro-card"><div class="retro-icon">♡</div><div class="retro-q">Lòng biết ơn & tự hào</div><textarea id="r-grat" placeholder="3 điều dù nhỏ..."></textarea></div>
+    <button class="jnav-btn" onclick="retroMove(1)">Tuần sau →</button>
+    <button class="jnav-btn" onclick="retroThisWeek()" style="margin-left:4px">Tuần này</button>
+  </div>
+  <div class="retro-grid">
+    <div class="retro-card"><div class="retro-icon">✓</div><div class="retro-q">Tuần này tôi đã đạt được?</div><textarea id="r-win" placeholder="Liệt kê win, dù nhỏ..." oninput="saveRetroFields()"></textarea></div>
+    <div class="retro-card"><div class="retro-icon">△</div><div class="retro-q">Điều chưa như ý? Vì sao?</div><textarea id="r-miss" placeholder="Phân tích nguyên nhân..." oninput="saveRetroFields()"></textarea></div>
+    <div class="retro-card"><div class="retro-icon">→</div><div class="retro-q">Tuần tới làm khác gì?</div><textarea id="r-next" placeholder="1 thay đổi cụ thể..." oninput="saveRetroFields()"></textarea></div>
+    <div class="retro-card"><div class="retro-icon">⚡</div><div class="retro-q">Mức năng lượng trung bình</div>
+      <div class="mood-row" style="padding:6px 0"><input type="range" min="1" max="10" value="7" id="r-energy" oninput="document.getElementById('r-ev').textContent=this.value;saveRetroFields()"><span class="mood-val" id="r-ev">7</span></div>
+      <textarea id="r-enote" placeholder="Ghi chú..." oninput="saveRetroFields()"></textarea>
+    </div>
+    <div class="retro-card"><div class="retro-icon">🎯</div><div class="retro-q">Đang đi đúng hướng chưa?</div><textarea id="r-align" placeholder="Nhìn lại OKR, WOOP..." oninput="saveRetroFields()"></textarea></div>
+    <div class="retro-card"><div class="retro-icon">♡</div><div class="retro-q">Lòng biết ơn & tự hào</div><textarea id="r-grat" placeholder="3 điều dù nhỏ..." oninput="saveRetroFields()"></textarea></div>
   </div>
 </div>
 
@@ -1038,7 +1047,7 @@ let D = {
   ],
   vision:{life10:'',y5eco:'',y5per:'',y5things:'',y1goals:[],q90goals:[],m30goals:[]},
   journals:{},
-  retro:{win:'',miss:'',next:'',energy:'7',enote:'',align:'',grat:''},
+  retros:{},
   nonneg:'',
   todos:[]
 };
@@ -1078,8 +1087,6 @@ function collectSimpleFields(){
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
     'w-note':'weekly.note',
     'non-neg':'nonneg',
-    'r-win':'retro.win','r-miss':'retro.miss','r-next':'retro.next',
-    'r-energy':'retro.energy','r-enote':'retro.enote','r-align':'retro.align','r-grat':'retro.grat',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
   Object.entries(map).forEach(([id,path])=>{
@@ -1102,8 +1109,6 @@ function fillSimpleFields(){
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
     'w-note':'weekly.note',
     'non-neg':'nonneg',
-    'r-win':'retro.win','r-miss':'retro.miss','r-next':'retro.next',
-    'r-energy':'retro.energy','r-enote':'retro.enote','r-align':'retro.align','r-grat':'retro.grat',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
   Object.entries(map).forEach(([id,path])=>{
@@ -1145,6 +1150,13 @@ function normalizeData(){
   D.per = Object.assign({objectives:[],skills:[],books:[]}, D.per||{});
   D.eco.objectives = migrateObjectives('eco');
   D.per.objectives = migrateObjectives('per');
+  D.retros = D.retros||{};
+  // migrate old single retro object → keyed by week
+  if(D.retro && typeof D.retro==='object'){
+    const wk = weekKey(new Date());
+    if(!D.retros[wk]) D.retros[wk] = D.retro;
+    delete D.retro;
+  }
   D.vision = Object.assign({life10:'',y5eco:'',y5per:'',y5things:'',y1goals:[],q90goals:[],m30goals:[]}, D.vision||{});
   ['y1goals','q90goals','m30goals'].forEach(k=>{if(!Array.isArray(D.vision[k]))D.vision[k]=[];});
   D.weekly = Object.assign({m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',energy:[],note:'',mits:[],rules:[]}, D.weekly||{});
@@ -1193,6 +1205,7 @@ function nav(p){
   document.getElementById('p-'+p).classList.add('on');
   document.querySelector('[data-p="'+p+'"]').classList.add('on');
   if(p==='journal') renderJournal();
+  if(p==='retro') renderRetro();
   if(p==='habits') renderHabits();
   if(p==='things') renderThings();
   if(p==='personal') renderPersonal();
@@ -1690,6 +1703,58 @@ function jMoodChange(){
   saveJournalFields();
   save();
 }
+// ── RETRO (per-week) ──
+function weekKey(d){
+  const dt = new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  dt.setUTCDate(dt.getUTCDate()+4-(dt.getUTCDay()||7));
+  const y = dt.getUTCFullYear();
+  const wn = Math.ceil((((dt-new Date(Date.UTC(y,0,1)))/86400000)+1)/7);
+  return y+'-W'+(wn<10?'0':'')+wn;
+}
+function weekStartDate(wkStr){
+  const [y,w] = wkStr.split('-W').map(Number);
+  const jan4 = new Date(Date.UTC(y,0,4));
+  const dow = jan4.getUTCDay()||7;
+  const weekStart = new Date(jan4);
+  weekStart.setUTCDate(jan4.getUTCDate()-dow+1+(w-1)*7);
+  return weekStart;
+}
+let retroWeek = weekKey(new Date());
+function retroThisWeek(){retroWeek=weekKey(new Date());renderRetro();}
+function retroMove(dir){
+  const d = weekStartDate(retroWeek);
+  d.setUTCDate(d.getUTCDate()+dir*7);
+  retroWeek = weekKey(d);
+  renderRetro();
+}
+function saveRetroFields(){
+  if(!retroWeek) return;
+  D.retros[retroWeek]={
+    win:document.getElementById('r-win').value,
+    miss:document.getElementById('r-miss').value,
+    next:document.getElementById('r-next').value,
+    energy:document.getElementById('r-energy').value,
+    enote:document.getElementById('r-enote').value,
+    align:document.getElementById('r-align').value,
+    grat:document.getElementById('r-grat').value
+  };
+  save();
+}
+function renderRetro(){
+  const r = D.retros[retroWeek]||{};
+  const start = weekStartDate(retroWeek);
+  const end = new Date(start); end.setUTCDate(start.getUTCDate()+6);
+  const fmt = d=>`${d.getUTCDate()}/${d.getUTCMonth()+1}`;
+  document.getElementById('retro-week-label').textContent = retroWeek.replace('-W',' — Tuần ');
+  document.getElementById('retro-week-range').textContent = `${fmt(start)} → ${fmt(end)}/${end.getUTCFullYear()}`;
+  const fields = {win:'',miss:'',next:'',energy:'7',enote:'',align:'',grat:''};
+  Object.keys(fields).forEach(k=>{
+    const el = document.getElementById('r-'+k);
+    if(el) el.value = r[k]!==undefined ? r[k] : fields[k];
+  });
+  const ev = document.getElementById('r-ev');
+  if(ev) ev.textContent = r.energy||'7';
+}
 function saveJournalFields(){
   if(!jDate) return;
   D.journals[jDate] = {
@@ -1996,6 +2061,7 @@ renderMilestones();
 renderRoutine();
 renderTodos();
 renderJournal();
+renderRetro();
 attachListeners();
 refreshDash();
 initMobileInstall();
