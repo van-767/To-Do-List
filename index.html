@@ -31,6 +31,7 @@ html{scroll-behavior:smooth}
   --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.04);
   --shadow-hover: 0 10px 20px -4px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
   --focus-ring: 0 0 0 3px rgba(245,158,11,.18);
+  --accent-deep:#F59E0B;--accent-health:#16A34A;--accent-admin:#0D9488;--accent-rest:#8B5CF6;--accent-meal:#E11D48;--accent-learn:#3B82F6;
 }
 body{font-family:'Inter', sans-serif;background:var(--bg);color:var(--t1);font-size:14px;line-height:1.6;display:flex;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 ::selection{background:var(--amber-bg);color:var(--amber)}
@@ -284,10 +285,26 @@ textarea{min-height:72px;line-height:1.5}
 .todo-add-row{display:grid;grid-template-columns:1fr 120px 120px auto;gap:8px;margin-bottom:14px}
 
 /* IDEAL DAY */
-.routine-list{display:flex;flex-direction:column;gap:5px}
-.routine-row{display:flex;align-items:center;gap:10px;background:var(--s);border:1px solid var(--bd);border-radius:8px;padding:9px 12px}
-.routine-time{min-width:80px}
-.routine-label{flex:1}
+.routine-list{display:flex;flex-direction:column;gap:6px}
+.routine-list{display:flex;flex-direction:column;gap:6px}
+.routine-row{display:grid;grid-template-columns:68px 120px 1fr auto;align-items:stretch;background:var(--s);border:1px solid var(--bd);border-radius:10px;overflow:hidden;transition:border-color var(--tr),box-shadow var(--tr)}
+.routine-row:hover{border-color:var(--bd2);box-shadow:var(--shadow-sm)}
+.routine-row:focus-within{border-color:var(--amber-m);box-shadow:var(--focus-ring)}
+.rt-deep{background:var(--amber-m)}
+.rt-health{background:var(--green)}
+.rt-admin{background:var(--teal)}
+.rt-rest{background:#8B5CF6}
+.rt-meal{background:var(--coral)}
+.rt-learn{background:#3B82F6}
+.routine-time{border:none;border-right:1px solid var(--bd);border-radius:0;background:var(--s2);font-size:13px;font-weight:600;color:var(--t2);text-align:center;padding:10px 6px;font-family:'Inter',sans-serif;outline:none}
+.routine-time:focus{background:#fff;color:var(--t1);box-shadow:none}
+.routine-type{border:none;border-right:1px solid var(--bd);border-radius:0;background:var(--s2);font-size:12px;font-weight:500;color:var(--t2);padding:10px 8px;font-family:'Inter',sans-serif;cursor:pointer;outline:none;width:100%}
+.routine-type:focus{background:#fff;box-shadow:none}
+.routine-label{border:none;border-radius:0;background:transparent;font-size:14px;color:var(--t1);padding:10px 13px;font-family:'Inter',sans-serif;outline:none;width:100%}
+.routine-label::placeholder{color:var(--t3)}
+.routine-label:focus{background:#fafafa}
+.routine-del{background:none;border:none;border-left:1px solid var(--bd);color:var(--t3);cursor:pointer;padding:0 12px;font-size:13px;transition:var(--tr);touch-action:manipulation}
+.routine-del:hover{color:var(--coral);background:var(--coral-bg)}
 .routine-section{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.6px;padding:10px 0 5px;color:var(--t3)}
 
 /* HABITS */
@@ -793,7 +810,7 @@ textarea{min-height:72px;line-height:1.5}
 <div class="page" id="p-routine">
   <div class="ph"><div class="pe">Hành động</div><div class="pt">Ngày lý tưởng</div><div class="pd">Template ngày mặc định. Thêm / xoá các time block tuỳ ý.</div><div class="ftags"><span class="tag ta">Time Blocking — Cal Newport</span><span class="tag tt">Ultradian Rhythms</span></div></div>
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <div class="ct" style="margin:0"><div class="ca ca-a"></div>Time blocks</div>
       <button class="btn btn-a" style="font-size:12px" onclick="addBlock()">+ Thêm block</button>
     </div>
@@ -973,14 +990,14 @@ let D = {
   per:{vision:'',ww:'',wo:'',ob:'',pl:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',objectives:[],skills:[],books:[]},
   weekly:{m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',peak:'',low:'',note:'',mits:[''],rules:[{if:'',then:''}]},
   routine:[
-    {id:'r1',time:'6:00',label:'Thức dậy — morning routine'},
-    {id:'r2',time:'7:00',label:'Deep work — việc quan trọng nhất'},
-    {id:'r3',time:'10:00',label:'Review nhanh, email'},
-    {id:'r4',time:'12:00',label:'Nghỉ trưa'},
-    {id:'r5',time:'13:00',label:'Meeting, cộng tác'},
-    {id:'r6',time:'16:00',label:'Admin, dọn dẹp task'},
-    {id:'r7',time:'19:00',label:'Học, đọc sách'},
-    {id:'r8',time:'21:30',label:'Shutdown ritual — journal, nghỉ ngơi'}
+    {id:'r1',time:'6:00',label:'Thức dậy — morning routine',type:'health'},
+    {id:'r2',time:'7:00',label:'Deep work — việc quan trọng nhất',type:'deep'},
+    {id:'r3',time:'10:00',label:'Review nhanh, email',type:'admin'},
+    {id:'r4',time:'12:00',label:'Nghỉ trưa + ăn',type:'meal'},
+    {id:'r5',time:'13:00',label:'Meeting, cộng tác',type:'admin'},
+    {id:'r6',time:'16:00',label:'Admin, dọn dẹp task',type:'admin'},
+    {id:'r7',time:'19:00',label:'Học, đọc sách',type:'learn'},
+    {id:'r8',time:'21:30',label:'Shutdown ritual — journal, nghỉ ngơi',type:'rest'}
   ],
   milestones:Array(12).fill(''),
   habits:[
@@ -1478,16 +1495,29 @@ function setTodoFilter(btn){
 }
 
 // ── ROUTINE ──
+const BLOCK_TYPE_CLASS = {deep:'rt-deep',health:'rt-health',admin:'rt-admin',rest:'rt-rest',meal:'rt-meal',learn:'rt-learn'};
+const BLOCK_TYPE_OPTS = `
+  <option value="deep">🟠 Deep Work</option>
+  <option value="health">🟢 Sức khoẻ</option>
+  <option value="admin">🔵 Admin</option>
+  <option value="rest">🟣 Nghỉ ngơi</option>
+  <option value="meal">🔴 Ăn uống</option>
+  <option value="learn">💙 Học tập</option>`;
 function renderRoutine(){
   const el = document.getElementById('routine-list');
-  el.innerHTML = D.routine.map(b=>`
-    <div class="routine-row">
-      <input class="routine-time" type="text" value="${escapeAttr(b.time)}" oninput="updateBlock('${b.id}','time',this.value)" placeholder="7:00">
-      <input class="routine-label" type="text" value="${escapeAttr(b.label)}" oninput="updateBlock('${b.id}','label',this.value)" placeholder="Hoạt động...">
-      <button class="btn-del" onclick="deleteBlock('${b.id}')">✕</button>
-    </div>`).join('');
+  el.innerHTML = D.routine.map(b=>{
+    const t=b.type||'deep';
+    const cls=BLOCK_TYPE_CLASS[t]||'rt-deep';
+    const opts=BLOCK_TYPE_OPTS.replace(`value="${t}"`,`value="${t}" selected`);
+    return `<div class="routine-row" style="border-left:4px solid var(--accent-${t})">
+      <input class="routine-time" type="text" value="${escapeAttr(b.time)}" oninput="updateBlock('${b.id}','time',this.value)" placeholder="6:00">
+      <select class="routine-type" onchange="updateBlock('${b.id}','type',this.value);renderRoutine()">${opts}</select>
+      <input class="routine-label" type="text" value="${escapeAttr(b.label)}" oninput="updateBlock('${b.id}','label',this.value)" placeholder="Mô tả hoạt động...">
+      <button class="routine-del" onclick="deleteBlock('${b.id}')">✕</button>
+    </div>`;
+  }).join('');
 }
-function addBlock(){D.routine.push({id:'r'+Date.now(),time:'',label:''});save();renderRoutine();}
+function addBlock(){D.routine.push({id:'r'+Date.now(),time:'',label:'',type:'deep'});save();renderRoutine();}
 function deleteBlock(id){D.routine=D.routine.filter(b=>b.id!==id);save();renderRoutine();}
 function updateBlock(id,key,val){const b=D.routine.find(x=>x.id===id);if(b)b[key]=val;save();}
 
