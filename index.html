@@ -286,7 +286,6 @@ textarea{min-height:72px;line-height:1.5}
 
 /* IDEAL DAY */
 .routine-list{display:flex;flex-direction:column;gap:6px}
-.routine-list{display:flex;flex-direction:column;gap:6px}
 .routine-row{display:grid;grid-template-columns:68px 120px 1fr auto;align-items:stretch;background:var(--s);border:1px solid var(--bd);border-radius:10px;overflow:hidden;transition:border-color var(--tr),box-shadow var(--tr)}
 .routine-row:hover{border-color:var(--bd2);box-shadow:var(--shadow-sm)}
 .routine-row:focus-within{border-color:var(--amber-m);box-shadow:var(--focus-ring)}
@@ -1223,7 +1222,7 @@ function renderDashTodos(){
   const items = D.todos.filter(t=>!t.done).sort((a,b)=>(rank[a.quad]??9)-(rank[b.quad]??9)).slice(0,5);
   el.innerHTML = items.map(t=>`
     <div class="focus-item">
-      <button class="focus-check" onclick="toggleTodo('${t.id}')" aria-label="Hoàn thành task"></button>
+      <button class="focus-check" onclick="toggleTodo('${t.id}');renderDashTodos()" aria-label="Hoàn thành task"></button>
       <div class="focus-text">
         <strong>${escapeHtml(t.text)}</strong>
         <span class="focus-meta">${{q1:'Khẩn + quan trọng',q2:'Quan trọng dài hạn',q3:'Khẩn nhưng nên giảm',q4:'Nên bỏ bớt'}[t.quad]||'Task'} · ${{e:'Kinh tế',t:'Wishlist',p:'Phát triển',o:'Khác'}[t.cat]||'Khác'}</span>
@@ -1420,6 +1419,8 @@ function addWish(){
   if(!name) return;
   D.things.push({id:'w'+Date.now(),name,cat:document.getElementById('nw-cat').value,cost:document.getElementById('nw-cost').value,status:document.getElementById('nw-status').value,note:document.getElementById('nw-note').value});
   ['nw-name','nw-cost','nw-note'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('nw-status').value='dreaming';
+  document.getElementById('nw-cat').selectedIndex=0;
   closeAddWish(); save(); renderThings();
 }
 function deleteWish(id){D.things=D.things.filter(w=>w.id!==id);save();renderThings();}
