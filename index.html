@@ -130,6 +130,12 @@ textarea{min-height:72px;line-height:1.5}
 .qprev.em{color:var(--t3);font-style:normal}
 .gb{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--amber);cursor:pointer;font-weight:500;border:none;background:none;padding:0;font-family:inherit;margin-top:8px}
 
+/* ENERGY BLOCK */
+.energy-time-row{display:flex;align-items:center;gap:8px}
+.energy-time-row input[type=time]{flex:1;font-size:15px;font-weight:500;padding:7px 10px;border-radius:var(--r-xs);border:1px solid var(--bd);background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;cursor:pointer;outline:none;transition:border-color var(--tr),box-shadow var(--tr)}
+.energy-time-row input[type=time]:focus{border-color:var(--amber-m);box-shadow:var(--focus-ring);background:#fff}
+.energy-arrow{color:var(--t3);font-size:16px;flex-shrink:0}
+
 /* COMMAND CENTER */
 .command-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:14px;align-items:start;margin-top:16px}
 .command-stack{display:flex;flex-direction:column;gap:12px}
@@ -207,14 +213,15 @@ textarea{min-height:72px;line-height:1.5}
 .okr-note{background:#fff!important;border:1px solid var(--bd)!important;border-radius:10px!important;font-size:13px!important;margin-bottom:12px}
 .okr-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .kr-list{display:grid;gap:8px}
-.kr-line{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;background:#fff;border:1px solid var(--bd);border-radius:12px;padding:8px 10px}
-.kr-line input{background:transparent!important;border:0!important;padding:2px 0!important;font-size:13px!important}
-.kr-line input:focus{box-shadow:none!important;border:0!important}
+.kr-line{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;background:#fff;border:1px solid var(--bd);border-radius:12px;padding:8px 10px;transition:border-color var(--tr),box-shadow var(--tr)}
+.kr-line:focus-within{border-color:var(--amber-m);box-shadow:var(--focus-ring)}
+.kr-line input{background:transparent!important;border:0!important;padding:2px 0!important;font-size:13px!important;outline:none!important}
+.kr-line input:focus{box-shadow:none!important;border:0!important;outline:none!important}
 .list-crud{display:grid;gap:8px}
-.list-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;background:var(--s2);border:1px solid transparent;border-radius:12px;padding:9px 10px}
-.list-row:focus-within{background:#fff;border-color:var(--bd2)}
-.list-row input{background:transparent!important;border:0!important;padding:2px 0!important}
-.list-row input:focus{box-shadow:none!important;border:0!important}
+.list-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;background:var(--s2);border:1px solid transparent;border-radius:12px;padding:9px 10px;transition:border-color var(--tr),box-shadow var(--tr),background var(--tr)}
+.list-row:focus-within{background:#fff;border-color:var(--amber-m);box-shadow:var(--focus-ring)}
+.list-row input{background:transparent!important;border:0!important;padding:2px 0!important;outline:none!important}
+.list-row input:focus{box-shadow:none!important;border:0!important;outline:none!important}
 .list-index{font-size:11px;font-weight:700;color:var(--t3);min-width:36px}
 .rule-row{grid-template-columns:auto 1fr 1fr auto}
 
@@ -241,11 +248,11 @@ textarea{min-height:72px;line-height:1.5}
 
 /* PERSONAL DEV */
 .skill-list{display:flex;flex-direction:column;gap:6px}
-.skill-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--s2);border-radius:var(--r-sm);border:1px solid transparent;transition:border-color var(--tr),background var(--tr)}
-.skill-item:focus-within{background:#fff;border-color:var(--bd2)}
+.skill-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--s2);border-radius:var(--r-sm);border:1px solid transparent;transition:border-color var(--tr),background var(--tr),box-shadow var(--tr)}
+.skill-item:focus-within{background:#fff;border-color:var(--amber-m);box-shadow:var(--focus-ring)}
 .skill-item input{flex:1;border:none;background:transparent;font-family:'Inter', sans-serif;font-size:14px;color:var(--t1);outline:none;transition:none}
-.book-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--s2);border-radius:var(--r-sm);margin-bottom:5px;border:1px solid transparent;transition:border-color var(--tr),background var(--tr)}
-.book-item:focus-within{background:#fff;border-color:var(--bd2)}
+.book-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--s2);border-radius:var(--r-sm);margin-bottom:5px;border:1px solid transparent;transition:border-color var(--tr),background var(--tr),box-shadow var(--tr)}
+.book-item:focus-within{background:#fff;border-color:var(--amber-m);box-shadow:var(--focus-ring)}
 .book-status{font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px}
 .bs-todo{background:#f0efe9;color:var(--t3)}
 .bs-reading{background:var(--amber-bg);color:var(--amber)}
@@ -337,7 +344,11 @@ textarea{min-height:72px;line-height:1.5}
 .jnav-btn{background:none;border:1px solid var(--bd);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:inherit;font-size:13px;color:var(--t2);transition:var(--tr)}
 .jnav-btn:hover{background:var(--s2)}
 .mood-row{display:flex;align-items:center;gap:12px;padding:10px 0}
-.mood-row input[type=range]{flex:1;accent-color:var(--amber)}
+.mood-row input[type=range]{flex:1;accent-color:var(--amber);appearance:none;-webkit-appearance:none;background:transparent;outline:none;height:4px}
+.mood-row input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:var(--bd)}
+.mood-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--amber-m);margin-top:-7px;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.mood-row input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--bd);border:none}
+.mood-row input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--amber-m);border:none}
 .mood-val{font-size:18px;font-weight:500;color:var(--amber);min-width:24px}
 .mood-emoji{font-size:20px}
 
@@ -369,7 +380,11 @@ textarea{min-height:72px;line-height:1.5}
 /* KR PROGRESS */
 .kr-line{position:relative}
 .kr-prog-wrap{display:flex;align-items:center;gap:6px;margin-top:5px;padding:0 2px}
-.kr-prog-wrap input[type=range]{flex:1;height:4px;accent-color:var(--amber-m);cursor:pointer}
+.kr-prog-wrap input[type=range]{flex:1;height:4px;accent-color:var(--amber-m);cursor:pointer;appearance:none;-webkit-appearance:none;background:transparent;outline:none}
+.kr-prog-wrap input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:var(--bd)}
+.kr-prog-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--amber-m);margin-top:-5px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.kr-prog-wrap input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--bd);border:none}
+.kr-prog-wrap input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--amber-m);border:none;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .kr-pct{font-size:11px;font-weight:600;color:var(--amber);min-width:30px;text-align:right}
 .kr-bar{height:3px;background:var(--bd);border-radius:2px;margin-top:4px;overflow:hidden}
 .kr-bar-fill{height:100%;border-radius:2px;background:var(--amber-m);transition:width .3s}
@@ -386,7 +401,7 @@ textarea{min-height:72px;line-height:1.5}
 .hz-sci{font-size:11px;color:var(--t3);font-style:italic;margin-left:auto}
 .hz-goal-list{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .hz-row{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid transparent;border-radius:8px;padding:7px 10px;transition:var(--tr)}
-.hz-row:focus-within{background:#fff;border-color:var(--bd2)}
+.hz-row:focus-within{background:#fff;border-color:var(--amber-m);box-shadow:var(--focus-ring)}
 .hz-row.done-row{opacity:.5}
 .hz-check{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--bd2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;background:#fff;transition:var(--tr)}
 .hz-check.checked{background:var(--green);border-color:var(--green);color:#fff}
@@ -610,6 +625,17 @@ textarea{min-height:72px;line-height:1.5}
         </div>
         <div class="score-ring" id="habit-score-ring"><strong id="habit-score">0%</strong></div>
         <div class="score-label" id="habit-score-label">Chưa tick habit hôm nay.</div>
+        <div style="display:flex;justify-content:center;gap:16px;margin-top:10px">
+          <div style="text-align:center">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:2px">Hôm nay</div>
+            <div style="font-size:15px;font-weight:600;color:var(--t1)" id="habit-today-pct">0%</div>
+          </div>
+          <div style="width:1px;background:var(--bd)"></div>
+          <div style="text-align:center">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:2px">Tuần này</div>
+            <div style="font-size:15px;font-weight:600;color:var(--green)" id="habit-week-pct">0%</div>
+          </div>
+        </div>
         <div class="habit-mini" id="dash-habits"></div>
       </section>
 
@@ -800,7 +826,13 @@ textarea{min-height:72px;line-height:1.5}
     <div class="list-crud" id="weekly-rule-list"></div>
   </div>
   <div class="g2" style="gap:14px">
-    <div class="card" style="margin:0"><div class="ct"><div class="ca ca-t"></div>Cao điểm năng lượng</div><input type="text" id="w-peak" placeholder="VD: 6h–10h sáng — deep work"><div style="margin-top:10px"></div><input type="text" id="w-low" placeholder="VD: 2h–4h chiều — email, admin"></div>
+    <div class="card" style="margin:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div class="ct" style="margin:0"><div class="ca ca-t"></div>Nhịp năng lượng trong ngày</div>
+        <button class="btn btn-a" style="font-size:12px" onclick="addEnergyBlock()">+ Thêm block</button>
+      </div>
+      <div id="energy-list"></div>
+    </div>
     <div class="card" style="margin:0"><div class="ct"><div class="ca ca-p"></div>Ghi chú tuần</div><textarea id="w-note" placeholder="Điều cần nhớ, context đặc biệt tuần này..." style="min-height:96px"></textarea></div>
   </div>
 </div>
@@ -987,7 +1019,7 @@ let D = {
   eco:{income:'',expense:'',savings:'',invest:'',vision:'',why:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',obj2:'',kr2a:'',kr2b:'',objectives:[]},
   things:[],
   per:{vision:'',ww:'',wo:'',ob:'',pl:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',objectives:[],skills:[],books:[]},
-  weekly:{m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',peak:'',low:'',note:'',mits:[''],rules:[{if:'',then:''}]},
+  weekly:{m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',energy:[{id:'e1',type:'peak',from:'06:00',to:'10:00',label:''},{id:'e2',type:'low',from:'14:00',to:'16:00',label:''}],note:'',mits:[''],rules:[{if:'',then:''}]},
   routine:[
     {id:'r1',time:'6:00',label:'Thức dậy — morning routine',type:'health'},
     {id:'r2',time:'7:00',label:'Deep work — việc quan trọng nhất',type:'deep'},
@@ -1044,7 +1076,7 @@ function collectSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
-    'w-peak':'weekly.peak','w-low':'weekly.low','w-note':'weekly.note',
+    'w-note':'weekly.note',
     'non-neg':'nonneg',
     'r-win':'retro.win','r-miss':'retro.miss','r-next':'retro.next',
     'r-energy':'retro.energy','r-enote':'retro.enote','r-align':'retro.align','r-grat':'retro.grat',
@@ -1068,7 +1100,7 @@ function fillSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
-    'w-peak':'weekly.peak','w-low':'weekly.low','w-note':'weekly.note',
+    'w-note':'weekly.note',
     'non-neg':'nonneg',
     'r-win':'retro.win','r-miss':'retro.miss','r-next':'retro.next',
     'r-energy':'retro.energy','r-enote':'retro.enote','r-align':'retro.align','r-grat':'retro.grat',
@@ -1115,7 +1147,16 @@ function normalizeData(){
   D.per.objectives = migrateObjectives('per');
   D.vision = Object.assign({life10:'',y5eco:'',y5per:'',y5things:'',y1goals:[],q90goals:[],m30goals:[]}, D.vision||{});
   ['y1goals','q90goals','m30goals'].forEach(k=>{if(!Array.isArray(D.vision[k]))D.vision[k]=[];});
-  D.weekly = Object.assign({m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',peak:'',low:'',note:'',mits:[],rules:[]}, D.weekly||{});
+  D.weekly = Object.assign({m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',energy:[],note:'',mits:[],rules:[]}, D.weekly||{});
+  // migrate old peak/low (string or object) → energy array
+  if(!Array.isArray(D.weekly.energy)||!D.weekly.energy.length){
+    const p = D.weekly.peak, l = D.weekly.low;
+    D.weekly.energy = [
+      {id:'e1',type:'peak',from:(p&&p.from)||'',to:(p&&p.to)||'',label:(p&&p.label)||(typeof p==='string'?p:'')||''},
+      {id:'e2',type:'low', from:(l&&l.from)||'',to:(l&&l.to)||'',label:(l&&l.label)||(typeof l==='string'?l:'')||''}
+    ];
+  }
+  delete D.weekly.peak; delete D.weekly.low;
   if(!Array.isArray(D.weekly.mits)||!D.weekly.mits.length) D.weekly.mits = [D.weekly.m1,D.weekly.m2,D.weekly.m3].filter(Boolean);
   if(!D.weekly.mits.length) D.weekly.mits = [''];
   if(!Array.isArray(D.weekly.rules)||!D.weekly.rules.length) D.weekly.rules = [[D.weekly.if1,D.weekly.th1],[D.weekly.if2,D.weekly.th2],[D.weekly.if3,D.weekly.th3]].filter(r=>r[0]||r[1]).map(r=>({if:r[0]||'',then:r[1]||''}));
@@ -1156,7 +1197,7 @@ function nav(p){
   if(p==='things') renderThings();
   if(p==='personal') renderPersonal();
   if(p==='eco') renderObjectives('eco');
-  if(p==='weekly') renderWeekly();
+  if(p==='weekly'){renderWeekly();renderEnergyBlocks();}
   if(p==='routine') renderRoutine();
   if(p==='vision') renderVision();
 }
@@ -1236,10 +1277,19 @@ function renderDashHabits(){
   if(!list) return;
   const total = D.habits.length;
   const doneToday = D.habits.filter(h=>h.completions&&h.completions[today()]).length;
-  const score = total ? Math.round(doneToday/total*100) : 0;
-  document.getElementById('habit-score').textContent = score+'%';
-  document.getElementById('habit-score-ring').style.background = `conic-gradient(var(--green) ${score}%, var(--bd) 0)`;
+  const todayPct = total ? Math.round(doneToday/total*100) : 0;
+  // weekly score: trung bình (số ngày đã làm / target) của tất cả habits
+  const weekPct = total ? Math.round(D.habits.reduce((sum,h)=>{
+    const done = weekCompletion(h);
+    const target = habitTarget(h);
+    return sum + Math.min(100, done/target*100);
+  },0) / total) : 0;
+  // vòng tròn hiện weekly score để không bao giờ 0% vô lý
+  document.getElementById('habit-score').textContent = weekPct+'%';
+  document.getElementById('habit-score-ring').style.background = `conic-gradient(var(--green) ${weekPct}%, var(--bd) 0)`;
   document.getElementById('habit-score-label').textContent = total ? `${doneToday}/${total} habit đã tick hôm nay.` : 'Chưa có habit nào.';
+  document.getElementById('habit-today-pct').textContent = todayPct+'%';
+  document.getElementById('habit-week-pct').textContent = weekPct+'%';
   list.innerHTML = D.habits.slice(0,5).map(h=>{
     const done = !!(h.completions&&h.completions[today()]);
     const week = weekCompletion(h);
@@ -1260,7 +1310,7 @@ function renderDashWeek(){
   const rules = (D.weekly.rules||[]).filter(x=>x.if||x.then);
   const lines = [
     ...mits.map((m,i)=>`<div class="week-line"><b>M${i+1}</b><span>${escapeHtml(m)}</span></div>`),
-    D.weekly.peak ? `<div class="week-line"><b>Peak</b><span>${escapeHtml(D.weekly.peak)}</span></div>` : '',
+    ...(D.weekly.energy||[]).filter(b=>b.from||b.label).map(b=>`<div class="week-line"><b>${(ENERGY_TYPES[b.type]||ENERGY_TYPES.mid).label}</b><span>${b.from||'?'}–${b.to||'?'} ${escapeHtml(b.label||'')}</span></div>`),
     ...rules.slice(0,2).map(r=>`<div class="week-line"><b>If</b><span>${escapeHtml(r.if||'Tình huống')} → ${escapeHtml(r.then||'hành động')}</span></div>`)
   ].filter(Boolean);
   el.innerHTML = lines.join('') || '<div class="empty-state">Chưa có kế hoạch tuần. Điền 3 MIT trước, sau đó mới thêm task.</div>';
@@ -1362,6 +1412,31 @@ function createTodoFromObjective(area,id){
 }
 
 // ── WEEKLY CRUD ──
+const ENERGY_TYPES = {peak:{label:'🔥 Cao điểm',color:'var(--amber-m)',hint:'VD: deep work, code, viết...'},low:{label:'🔴 Thấp điểm',color:'var(--coral)',hint:'VD: email, họp nhẹ, admin...'},mid:{label:'🔵 Bình thường',color:'#3B82F6',hint:'VD: meeting, học, đọc sách...'}};
+function renderEnergyBlocks(){
+  const el = document.getElementById('energy-list');
+  if(!el) return;
+  el.innerHTML = (D.weekly.energy||[]).map(b=>{
+    const cfg = ENERGY_TYPES[b.type]||ENERGY_TYPES.mid;
+    return `<div style="border-left:3px solid ${cfg.color};padding-left:12px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <select style="font-size:11px;font-weight:600;border:none;background:transparent;color:${cfg.color};cursor:pointer;outline:none;padding:0;text-transform:uppercase;letter-spacing:.5px" onchange="updateEnergyBlock('${b.id}','type',this.value);renderEnergyBlocks()">
+          ${Object.entries(ENERGY_TYPES).map(([v,c])=>`<option value="${v}"${b.type===v?' selected':''}>${c.label}</option>`).join('')}
+        </select>
+        <button class="btn-del" style="margin-left:auto" onclick="deleteEnergyBlock('${b.id}')">✕</button>
+      </div>
+      <div class="energy-time-row">
+        <input type="time" value="${b.from||''}" oninput="updateEnergyBlock('${b.id}','from',this.value)">
+        <span class="energy-arrow">→</span>
+        <input type="time" value="${b.to||''}" oninput="updateEnergyBlock('${b.id}','to',this.value)">
+      </div>
+      <input type="text" value="${escapeAttr(b.label||'')}" placeholder="${cfg.hint}" style="margin-top:8px" oninput="updateEnergyBlock('${b.id}','label',this.value)">
+    </div>`;
+  }).join('') || '<div class="empty-state">Chưa có block. Thêm cao điểm và thấp điểm của bạn.</div>';
+}
+function addEnergyBlock(){D.weekly.energy.push({id:'e'+Date.now(),type:'peak',from:'',to:'',label:''});save();renderEnergyBlocks();}
+function deleteEnergyBlock(id){D.weekly.energy=D.weekly.energy.filter(b=>b.id!==id);save();renderEnergyBlocks();}
+function updateEnergyBlock(id,key,val){const b=D.weekly.energy.find(x=>x.id===id);if(b)b[key]=val;save();}
 function renderWeekly(){
   const mitEl = document.getElementById('weekly-mit-list');
   const ruleEl = document.getElementById('weekly-rule-list');
@@ -1915,7 +1990,7 @@ fillSimpleFields();
 renderThings();
 renderPersonal();
 renderObjectives('eco');
-renderWeekly();
+renderWeekly();renderEnergyBlocks();
 renderHabits();
 renderMilestones();
 renderRoutine();
