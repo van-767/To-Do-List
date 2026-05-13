@@ -2,7 +2,7 @@
   "name": "MyGoals Personal OS",
   "short_name": "MyGoals",
   "description": "Personal goals, habits, tasks, weekly planning, and journal.",
-  "start_url": "./MyGoals_v3.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#F8FAFC",

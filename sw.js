@@ -1,6 +1,6 @@
 const CACHE_NAME = 'mygoals-v3-cache-v3';
 const APP_SHELL = [
-  './MyGoals_v3.html',
+  './index.html',
   './manifest.webmanifest',
   './icons/mygoals-icon.svg'
 ];
@@ -31,7 +31,7 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       }).catch(() => {
-        if (event.request.mode === 'navigate') return caches.match('./MyGoals_v3.html');
+        if (event.request.mode === 'navigate') return caches.match('./index.html');
         return caches.match(event.request);
       });
     })
