@@ -90,7 +90,7 @@ label{display:block;font-size:11px;font-weight:500;color:var(--t3);text-transfor
 input[type=text],input[type=number],input[type=date],textarea,select{width:100%;border:1px solid var(--bd);border-radius:var(--r-xs);padding:8px 11px;font-family:'Inter', sans-serif;font-size:14px;color:var(--t1);background:var(--bg);transition:border-color var(--tr),box-shadow var(--tr);outline:none;resize:vertical}
 input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,textarea:focus,select:focus{border-color:var(--amber-m);box-shadow:var(--focus-ring);background:#fff}
 
-textarea{min-height:72px;line-height:1.5}
+textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 .ta-auto{min-height:unset!important;height:auto;resize:none!important;overflow:hidden;line-height:1.5;padding:6px 0!important;display:block}
 .f{margin-bottom:13px} .f:last-child{margin-bottom:0}
 
@@ -327,6 +327,9 @@ textarea{min-height:72px;line-height:1.5}
 .routine-label:focus{background:#fafafa}
 .routine-del{background:none;border:none;border-left:1px solid var(--bd);color:var(--t3);cursor:pointer;padding:0 12px;font-size:13px;transition:var(--tr);touch-action:manipulation}
 .routine-del:hover{color:var(--coral);background:var(--coral-bg)}
+.day-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.day-btn{padding:6px 14px;border-radius:var(--r-sm);border:1px solid var(--bd);background:var(--s2);font-size:13px;font-weight:500;cursor:pointer;color:var(--t2);transition:var(--tr);touch-action:manipulation}
+.day-btn.active{background:var(--amber-m);color:#fff;border-color:var(--amber-m)}
 .routine-section{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.6px;padding:10px 0 5px;color:var(--t3)}
 
 /* HABITS */
@@ -423,7 +426,7 @@ textarea{min-height:72px;line-height:1.5}
 .hz-check.checked{background:var(--green);border-color:var(--green);color:#fff}
 .hz-inp{flex:1;border:none;background:transparent;font-size:14px;color:var(--t1);outline:none;transition:color var(--tr)}
 .hz-inp:focus{color:var(--t1)}
-.hz-cat{font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;flex-shrink:0;border:none;background:var(--s2);cursor:pointer}
+.hz-cat{width:30px;flex-shrink:0;border:none;background:transparent;cursor:pointer;font-size:15px;padding:0 2px;text-align:center;appearance:none;-webkit-appearance:none;outline:none;color:inherit}
 .hz-5yr-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:4px}
 .hz-5col{background:var(--s2);border-radius:8px;padding:12px}
 .hz-5col label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
@@ -845,6 +848,12 @@ textarea{min-height:72px;line-height:1.5}
 <!-- ══ WEEKLY ══ -->
 <div class="page" id="p-weekly">
   <div class="ph"><div class="pe">Hành động</div><div class="pt">Kế hoạch tuần</div><div class="pd">Thiết lập ý định trước tuần mới. Chủ nhật tối hoặc sáng thứ Hai.</div><div class="ftags"><span class="tag tg">Implementation Intentions — Gollwitzer 1999</span><span class="tag ta">Most Important Tasks</span></div></div>
+  <div class="journal-nav" style="margin-bottom:16px">
+    <button class="jnav-btn" onclick="weeklyMove(-1)">← Tuần trước</button>
+    <div class="jdate" id="weekly-week-label"></div>
+    <button class="jnav-btn" onclick="weeklyMove(1)">Tuần sau →</button>
+    <button class="jnav-btn" onclick="weeklyToday()">Tuần này</button>
+  </div>
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px">
       <div class="ct" style="margin:0"><div class="ca ca-a"></div>Việc quan trọng nhất tuần</div>
@@ -868,7 +877,7 @@ textarea{min-height:72px;line-height:1.5}
       </div>
       <div id="energy-list"></div>
     </div>
-    <div class="card" style="margin:0"><div class="ct"><div class="ca ca-p"></div>Ghi chú tuần</div><textarea id="w-note" placeholder="Điều cần nhớ, context đặc biệt tuần này..." style="min-height:96px"></textarea></div>
+    <div class="card" style="margin:0"><div class="ct"><div class="ca ca-p"></div>Ghi chú tuần</div><textarea id="w-note" placeholder="Điều cần nhớ, context đặc biệt tuần này..." oninput="getWeekly().note=this.value;save()"></textarea></div>
   </div>
 </div>
 
@@ -880,6 +889,7 @@ textarea{min-height:72px;line-height:1.5}
       <div class="ct" style="margin:0"><div class="ca ca-a"></div>Time blocks</div>
       <button class="btn btn-a" style="font-size:12px" onclick="addBlock()">+ Thêm block</button>
     </div>
+    <div class="day-selector" id="routine-day-selector"></div>
     <div class="routine-list" id="routine-list"></div>
   </div>
   <div class="card">
@@ -1120,7 +1130,6 @@ function collectSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
-    'w-note':'weekly.note',
     'non-neg':'nonneg',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
@@ -1144,7 +1153,6 @@ function fillSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
-    'w-note':'weekly.note',
     'non-neg':'nonneg',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
@@ -1202,20 +1210,33 @@ function normalizeData(){
   }
   D.vision = Object.assign({life10:'',y5eco:'',y5per:'',y5things:'',y1goals:[],q90goals:[],m30goals:[]}, D.vision||{});
   ['y1goals','q90goals','m30goals'].forEach(k=>{if(!Array.isArray(D.vision[k]))D.vision[k]=[];});
-  D.weekly = Object.assign({m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',energy:[],note:'',mits:[],rules:[]}, D.weekly||{});
-  // migrate old peak/low (string or object) → energy array
-  if(!Array.isArray(D.weekly.energy)||!D.weekly.energy.length){
-    const p = D.weekly.peak, l = D.weekly.low;
-    D.weekly.energy = [
-      {id:'e1',type:'peak',from:(p&&p.from)||'',to:(p&&p.to)||'',label:(p&&p.label)||(typeof p==='string'?p:'')||''},
-      {id:'e2',type:'low', from:(l&&l.from)||'',to:(l&&l.to)||'',label:(l&&l.label)||(typeof l==='string'?l:'')||''}
-    ];
+  // ── weekly per-week migration ──
+  D.weeklys = D.weeklys||{};
+  if(D.weekly && typeof D.weekly==='object'){
+    // normalize legacy D.weekly first
+    const w = Object.assign({m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',energy:[],note:'',mits:[],rules:[]}, D.weekly);
+    if(!Array.isArray(w.energy)||!w.energy.length){
+      const p=w.peak,l=w.low;
+      w.energy=[
+        {id:'e1',type:'peak',from:(p&&p.from)||'06:00',to:(p&&p.to)||'10:00',label:(p&&p.label)||(typeof p==='string'?p:'')||''},
+        {id:'e2',type:'low',from:(l&&l.from)||'14:00',to:(l&&l.to)||'16:00',label:(l&&l.label)||(typeof l==='string'?l:'')||''}
+      ];
+    }
+    if(!Array.isArray(w.mits)||!w.mits.length) w.mits=[w.m1,w.m2,w.m3].filter(Boolean);
+    if(!w.mits.length) w.mits=[''];
+    if(!Array.isArray(w.rules)||!w.rules.length) w.rules=[[w.if1,w.th1],[w.if2,w.th2],[w.if3,w.th3]].filter(r=>r[0]||r[1]).map(r=>({if:r[0]||'',then:r[1]||''}));
+    if(!w.rules.length) w.rules=[{if:'',then:''}];
+    // migrate to keyed storage if there's real data
+    const hasData = w.mits.some(m=>m)||(w.note&&w.note.trim());
+    if(hasData){const wk=weekKey(new Date());if(!D.weeklys[wk])D.weeklys[wk]=w;}
+    delete D.weekly;
   }
-  delete D.weekly.peak; delete D.weekly.low;
-  if(!Array.isArray(D.weekly.mits)||!D.weekly.mits.length) D.weekly.mits = [D.weekly.m1,D.weekly.m2,D.weekly.m3].filter(Boolean);
-  if(!D.weekly.mits.length) D.weekly.mits = [''];
-  if(!Array.isArray(D.weekly.rules)||!D.weekly.rules.length) D.weekly.rules = [[D.weekly.if1,D.weekly.th1],[D.weekly.if2,D.weekly.th2],[D.weekly.if3,D.weekly.th3]].filter(r=>r[0]||r[1]).map(r=>({if:r[0]||'',then:r[1]||''}));
-  if(!D.weekly.rules.length) D.weekly.rules = [{if:'',then:''}];
+  // ── routine per-day migration ──
+  D.routines = D.routines||{};
+  if(D.routine && Array.isArray(D.routine) && D.routine.length){
+    if(!D.routines['Mon']) D.routines['Mon'] = D.routine;
+    delete D.routine;
+  }
 }
 
 function normalizeKR(kr){
@@ -1364,11 +1385,13 @@ function renderDashHabits(){
 function renderDashWeek(){
   const el = document.getElementById('dash-week');
   if(!el) return;
-  const mits = (D.weekly.mits||[]).filter(Boolean);
-  const rules = (D.weekly.rules||[]).filter(x=>x.if||x.then);
+  const curWk = weekKey(new Date());
+  const w = D.weeklys&&D.weeklys[curWk] ? D.weeklys[curWk] : {mits:[],energy:[],rules:[]};
+  const mits = (w.mits||[]).filter(Boolean);
+  const rules = (w.rules||[]).filter(x=>x.if||x.then);
   const lines = [
     ...mits.map((m,i)=>`<div class="week-line"><b>M${i+1}</b><span>${escapeHtml(m)}</span></div>`),
-    ...(D.weekly.energy||[]).filter(b=>b.from||b.label).map(b=>`<div class="week-line"><b>${(ENERGY_TYPES[b.type]||ENERGY_TYPES.mid).label}</b><span>${b.from||'?'}–${b.to||'?'} ${escapeHtml(b.label||'')}</span></div>`),
+    ...(w.energy||[]).filter(b=>b.from||b.label).map(b=>`<div class="week-line"><b>${(ENERGY_TYPES[b.type]||ENERGY_TYPES.mid).label}</b><span>${b.from||'?'}–${b.to||'?'} ${escapeHtml(b.label||'')}</span></div>`),
     ...rules.slice(0,2).map(r=>`<div class="week-line"><b>If</b><span>${escapeHtml(r.if||'Tình huống')} → ${escapeHtml(r.then||'hành động')}</span></div>`)
   ].filter(Boolean);
   el.innerHTML = lines.join('') || '<div class="empty-state">Chưa có kế hoạch tuần. Điền 3 MIT trước, sau đó mới thêm task.</div>';
@@ -1376,7 +1399,7 @@ function renderDashWeek(){
 
 function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
 function initAutoResize(container){
-  (container||document).querySelectorAll('.ta-auto').forEach(el=>{autoResize(el);});
+  (container||document).querySelectorAll('textarea').forEach(el=>{autoResize(el);});
 }
 
 // ── MONEY FORMAT ──
@@ -1530,7 +1553,7 @@ const ENERGY_TYPES = {peak:{label:'🔥 Cao điểm',color:'var(--amber-m)',hint
 function renderEnergyBlocks(){
   const el = document.getElementById('energy-list');
   if(!el) return;
-  el.innerHTML = (D.weekly.energy||[]).map(b=>{
+  el.innerHTML = (getWeekly().energy||[]).map(b=>{
     const cfg = ENERGY_TYPES[b.type]||ENERGY_TYPES.mid;
     return `<div style="border-left:3px solid ${cfg.color};padding-left:12px;margin-bottom:14px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
@@ -1548,14 +1571,19 @@ function renderEnergyBlocks(){
     </div>`;
   }).join('') || '<div class="empty-state">Chưa có block. Thêm cao điểm và thấp điểm của bạn.</div>';
 }
-function addEnergyBlock(){D.weekly.energy.push({id:'e'+Date.now(),type:'peak',from:'',to:'',label:''});save();renderEnergyBlocks();}
-function deleteEnergyBlock(id){D.weekly.energy=D.weekly.energy.filter(b=>b.id!==id);save();renderEnergyBlocks();}
-function updateEnergyBlock(id,key,val){const b=D.weekly.energy.find(x=>x.id===id);if(b)b[key]=val;save();}
+function addEnergyBlock(){getWeekly().energy.push({id:'e'+Date.now(),type:'peak',from:'',to:'',label:''});save();renderEnergyBlocks();}
+function deleteEnergyBlock(id){const w=getWeekly();w.energy=w.energy.filter(b=>b.id!==id);save();renderEnergyBlocks();}
+function updateEnergyBlock(id,key,val){const b=getWeekly().energy.find(x=>x.id===id);if(b)b[key]=val;save();}
 function renderWeekly(){
+  const lbl=document.getElementById('weekly-week-label');
+  if(lbl) lbl.textContent=fmtWeekLabel(weeklyWeek);
+  const w=getWeekly();
+  const noteEl=document.getElementById('w-note');
+  if(noteEl){noteEl.value=w.note||'';autoResize(noteEl);}
   const mitEl = document.getElementById('weekly-mit-list');
   const ruleEl = document.getElementById('weekly-rule-list');
   if(mitEl){
-    mitEl.innerHTML = (D.weekly.mits||[]).map((m,i)=>`
+    mitEl.innerHTML = (w.mits||[]).map((m,i)=>`
       <div class="list-row">
         <span class="list-index">MIT ${i+1}</span>
         <textarea class="ta-auto" oninput="updateWeeklyMIT(${i},this.value);autoResize(this)" placeholder="Việc quan trọng nhất tuần...">${escapeHtml(m)}</textarea>
@@ -1563,7 +1591,7 @@ function renderWeekly(){
       </div>`).join('') || '<div class="empty-state">Chưa có MIT. Bấm thêm để tạo.</div>';
   }
   if(ruleEl){
-    ruleEl.innerHTML = (D.weekly.rules||[]).map((r,i)=>`
+    ruleEl.innerHTML = (w.rules||[]).map((r,i)=>`
       <div class="list-row rule-row">
         <span class="list-index">IF ${i+1}</span>
         <textarea class="ta-auto" oninput="updateWeeklyRule(${i},'if',this.value);autoResize(this)" placeholder="Khi...">${escapeHtml(r.if||'')}</textarea>
@@ -1572,12 +1600,12 @@ function renderWeekly(){
       </div>`).join('') || '<div class="empty-state">Chưa có luật If/Then. Bấm thêm để tạo.</div>';
   }
 }
-function addWeeklyMIT(){D.weekly.mits.push('');save();renderWeekly();}
-function updateWeeklyMIT(i,value){D.weekly.mits[i]=value;save();}
-function deleteWeeklyMIT(i){D.weekly.mits.splice(i,1);save();renderWeekly();}
-function addWeeklyRule(){D.weekly.rules.push({if:'',then:''});save();renderWeekly();}
-function updateWeeklyRule(i,key,value){D.weekly.rules[i][key]=value;save();}
-function deleteWeeklyRule(i){D.weekly.rules.splice(i,1);save();renderWeekly();}
+function addWeeklyMIT(){getWeekly().mits.push('');save();renderWeekly();}
+function updateWeeklyMIT(i,value){getWeekly().mits[i]=value;save();}
+function deleteWeeklyMIT(i){getWeekly().mits.splice(i,1);save();renderWeekly();}
+function addWeeklyRule(){getWeekly().rules.push({if:'',then:''});save();renderWeekly();}
+function updateWeeklyRule(i,key,value){getWeekly().rules[i][key]=value;save();}
+function deleteWeeklyRule(i){getWeekly().rules.splice(i,1);save();renderWeekly();}
 
 // ── THINGS / WISHLIST ──
 function renderThings(){
@@ -1728,9 +1756,10 @@ const BLOCK_TYPE_OPTS = `
   <option value="learn">💙 Học tập</option>`;
 function renderRoutine(){
   const el = document.getElementById('routine-list');
-  el.innerHTML = D.routine.map(b=>{
+  if(!el) return;
+  const rt = getRoutine();
+  el.innerHTML = rt.map(b=>{
     const t=b.type||'deep';
-    const cls=BLOCK_TYPE_CLASS[t]||'rt-deep';
     const opts=BLOCK_TYPE_OPTS.replace(`value="${t}"`,`value="${t}" selected`);
     return `<div class="routine-row" style="border-left:4px solid var(--accent-${t})">
       <input class="routine-time" type="text" value="${escapeAttr(b.time)}" oninput="updateBlock('${b.id}','time',this.value)" placeholder="6:00">
@@ -1738,11 +1767,11 @@ function renderRoutine(){
       <input class="routine-label" type="text" value="${escapeAttr(b.label)}" oninput="updateBlock('${b.id}','label',this.value)" placeholder="Mô tả hoạt động...">
       <button class="routine-del" onclick="deleteBlock('${b.id}')">✕</button>
     </div>`;
-  }).join('');
+  }).join('') || '<div class="empty-state">Chưa có block. Bấm Thêm block để bắt đầu.</div>';
 }
-function addBlock(){D.routine.push({id:'r'+Date.now(),time:'',label:'',type:'deep'});save();renderRoutine();}
-function deleteBlock(id){D.routine=D.routine.filter(b=>b.id!==id);save();renderRoutine();}
-function updateBlock(id,key,val){const b=D.routine.find(x=>x.id===id);if(b)b[key]=val;save();}
+function addBlock(){getRoutine().push({id:'r'+Date.now(),time:'',label:'',type:'deep'});save();renderRoutine();}
+function deleteBlock(id){const r=getRoutine();D.routines[routineDay]=r.filter(b=>b.id!==id);save();renderRoutine();}
+function updateBlock(id,key,val){const b=getRoutine().find(x=>x.id===id);if(b)b[key]=val;save();}
 
 // ── HABITS ──
 function getWeekDates(){
@@ -1853,6 +1882,37 @@ function weekStartDate(wkStr){
   return weekStart;
 }
 let retroWeek = weekKey(new Date());
+// ── WEEKLY PLAN (per-week) ──
+let weeklyWeek = weekKey(new Date());
+function getWeekly(){
+  if(!D.weeklys[weeklyWeek]) D.weeklys[weeklyWeek]={mits:[''],rules:[{if:'',then:''}],energy:[
+    {id:'e1',type:'peak',from:'06:00',to:'10:00',label:''},
+    {id:'e2',type:'low',from:'14:00',to:'16:00',label:''}
+  ],note:''};
+  return D.weeklys[weeklyWeek];
+}
+function fmtWeekLabel(wk){
+  const s=weekStartDate(wk), e=new Date(s); e.setUTCDate(s.getUTCDate()+6);
+  const fmt=d=>d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',timeZone:'UTC'});
+  const [yr,w]=wk.split('-W'); return `Tuần ${w} · ${fmt(s)} – ${fmt(e)}`;
+}
+function weeklyToday(){weeklyWeek=weekKey(new Date());renderWeekly();renderEnergyBlocks();}
+function weeklyMove(dir){
+  const d=weekStartDate(weeklyWeek);d.setUTCDate(d.getUTCDate()+dir*7);
+  weeklyWeek=weekKey(d);renderWeekly();renderEnergyBlocks();
+}
+// ── ROUTINE (per-day) ──
+const ROUTINE_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const ROUTINE_DAY_VN = {Mon:'T2',Tue:'T3',Wed:'T4',Thu:'T5',Fri:'T6',Sat:'T7',Sun:'CN'};
+const ROUTINE_DAY_FROM_DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let routineDay = ROUTINE_DAY_FROM_DOW[new Date().getDay()];
+function getRoutine(){if(!D.routines[routineDay])D.routines[routineDay]=[];return D.routines[routineDay];}
+function setRoutineDay(day){routineDay=day;renderDaySelector();renderRoutine();}
+function renderDaySelector(){
+  const el=document.getElementById('routine-day-selector');
+  if(!el) return;
+  el.innerHTML=ROUTINE_DAYS.map(d=>`<button class="day-btn${routineDay===d?' active':''}" onclick="setRoutineDay('${d}')">${ROUTINE_DAY_VN[d]}</button>`).join('');
+}
 function retroThisWeek(){retroWeek=weekKey(new Date());renderRetro();}
 function retroMove(dir){
   const d = weekStartDate(retroWeek);
@@ -2090,13 +2150,13 @@ function renderVision(){
     el.innerHTML = goals.map((g,i)=>`
       <div class="hz-row ${g.done?'done-row':''}">
         <div class="hz-check ${g.done?'checked':''}" onclick="toggleVisionGoal('${key}',${i})">${g.done?'✓':''}</div>
-        <input class="hz-inp" value="${escapeAttr(g.text)}" oninput="updateVisionGoal('${key}',${i},'text',this.value)" placeholder="Mục tiêu cụ thể...">
-        <select class="hz-cat" onchange="updateVisionGoal('${key}',${i},'cat',this.value)" style="color:${VIZ_CAT_COLORS[g.cat||'o']}">
-          <option value="e" ${g.cat==='e'?'selected':''}>💰 Eco</option>
-          <option value="p" ${g.cat==='p'?'selected':''}>🧠 Dev</option>
-          <option value="t" ${g.cat==='t'?'selected':''}>🎁 Things</option>
-          <option value="o" ${(!g.cat||g.cat==='o')?'selected':''}>⚙️ Khác</option>
+        <select class="hz-cat" onchange="updateVisionGoal('${key}',${i},'cat',this.value)" title="${VIZ_CAT_LABELS[g.cat||'o']}">
+          <option value="e" ${g.cat==='e'?'selected':''}>💰</option>
+          <option value="p" ${g.cat==='p'?'selected':''}>🧠</option>
+          <option value="t" ${g.cat==='t'?'selected':''}>🎁</option>
+          <option value="o" ${(!g.cat||g.cat==='o')?'selected':''}>⚙️</option>
         </select>
+        <input class="hz-inp" value="${escapeAttr(g.text)}" oninput="updateVisionGoal('${key}',${i},'text',this.value)" placeholder="Mục tiêu cụ thể...">
         <button class="btn-del" onclick="deleteVisionGoal('${key}',${i})">✕</button>
       </div>`).join('') || '<div style="font-size:13px;color:var(--t3);padding:6px 2px">Chưa có mục tiêu. Bấm + Thêm để bắt đầu.</div>';
   });
@@ -2170,10 +2230,12 @@ function attachListeners(){
   const ids = [
     'eco-income','eco-expense','eco-savings','eco-invest','eco-vision','eco-why',
     'per-vision','per-ww','per-wo','per-ob','per-pl',
-    'w-note','non-neg',
+    'non-neg',
     'v-life10','v-5eco','v-5per','v-5things'
   ];
   ids.forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',save);});
+  // global auto-resize for all textareas
+  document.addEventListener('input',e=>{if(e.target.tagName==='TEXTAREA') autoResize(e.target);});
   // journal fields — need saveJournalFields() before save()
   ['j-intention','j-t1','j-t2','j-t3','j-highlight','j-g1','j-g2','j-g3','j-learned','j-tomorrow']
     .forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',()=>{saveJournalFields();save();});});
@@ -2195,7 +2257,8 @@ renderObjectives('eco');
 renderWeekly();renderEnergyBlocks();
 renderHabits();
 renderMilestones();
-renderRoutine();
+renderDaySelector();renderRoutine();
+renderVision();
 renderTodos();
 renderJournal();
 renderRetro();
