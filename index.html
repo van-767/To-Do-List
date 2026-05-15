@@ -557,51 +557,45 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   input[type=text],input[type=number],input[type=date],input[type=time],textarea,select{font-size:16px!important}
 }
 /* ── PRINCIPLES ── */
-@keyframes prinIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes prinOut{from{opacity:1;transform:translateY(0) scale(1);max-height:200px;margin-bottom:8px}to{opacity:0;transform:translateY(-8px) scale(.95);max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0}}
-.prin-hero{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);border:1px solid #FFE4E6;overflow:hidden;margin-bottom:0}
-.prin-hero-band{background:linear-gradient(90deg,#F43F5E 0%,#FB7185 50%,#FDA4AF 100%);height:4px}
-.prin-hero-inner{padding:22px 22px 18px}
-.prin-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
-.prin-hero-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#F43F5E;font-weight:600;margin-bottom:4px}
-.prin-hero-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--t1);font-weight:600;line-height:1.3}
-.prin-hero-sub{font-size:11px;color:var(--t3);margin-top:5px;line-height:1.6}
-.prin-hero-btn{background:#FFF1F2;border:1px solid #FECDD3;color:#F43F5E;font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:var(--tr);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
-.prin-hero-btn:hover{background:#FFE4E6;border-color:#FDA4AF;box-shadow:0 2px 12px rgba(244,63,94,.2)}
-.prin-reasons-list{display:flex;flex-direction:column;gap:8px}
-.prin-reason-item{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;background:#FFF5F5;border:1px solid #FFE4E6;border-radius:10px;transition:border-color .2s,box-shadow .2s,background .2s;animation:prinIn .28s cubic-bezier(.2,.8,.4,1) both}
-.prin-reason-item:hover{background:#FFF1F2;border-color:#FECDD3}
-.prin-reason-item:focus-within{background:#fff;border-color:#F43F5E;box-shadow:0 0 0 3px rgba(244,63,94,.1)}
-.prin-reason-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;box-shadow:0 2px 8px rgba(244,63,94,.3)}
-.prin-reason-item textarea{flex:1;border:none;background:transparent;font-size:14px;line-height:1.7;color:var(--t1);outline:none;min-height:44px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
-.prin-reason-item textarea::placeholder{color:#FCA5A5}
-.prin-reason-item .btn-del{color:#FCA5A5;transition:var(--tr)}
-.prin-reason-item .btn-del:hover{color:#F43F5E;background:#FFE4E6}
-.prin-reason-item.removing{animation:prinOut .22s cubic-bezier(.4,0,.6,1) both}
+@keyframes prinIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes prinOut{0%{opacity:1;max-height:120px;margin-bottom:8px;padding:12px 14px}100%{opacity:0;max-height:0;margin-bottom:0;padding:0 14px}}
+.prin-hero{background:var(--s);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--bd);overflow:hidden}
+.prin-hero-band{height:3px;background:linear-gradient(90deg,#BE123C,#E11D48,#F43F5E)}
+.prin-hero-inner{padding:20px 20px 16px}
+.prin-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
+.prin-hero-label{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--coral);font-weight:600;margin-bottom:5px}
+.prin-hero-title{font-family:'Playfair Display',serif;font-size:19px;color:var(--t1);font-weight:600;line-height:1.3}
+.prin-hero-sub{font-size:11px;color:var(--t3);margin-top:4px;line-height:1.65}
+.prin-hero-btn{background:var(--s2);border:1px solid var(--bd);color:var(--t2);font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:var(--tr);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
+.prin-hero-btn:hover{background:var(--coral-bg);border-color:var(--coral);color:var(--coral)}
+.prin-reasons-list{display:flex;flex-direction:column;gap:7px}
+.prin-reason-item{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--s2);border:1px solid var(--bd);border-left:3px solid #E11D48;border-radius:var(--r-sm);transition:background .18s,box-shadow .18s,border-color .18s;animation:prinIn .25s ease both}
+.prin-reason-item:hover{background:#fff;border-color:var(--bd2);border-left-color:#E11D48}
+.prin-reason-item:focus-within{background:#fff;border-color:var(--bd2);border-left-color:#E11D48;box-shadow:var(--shadow)}
+.prin-reason-num{width:22px;height:22px;border-radius:50%;background:#E11D48;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.prin-reason-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.65;color:var(--t1);outline:none;min-height:40px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
+.prin-reason-item textarea::placeholder{color:var(--t3)}
+.prin-reason-item .btn-del{color:var(--t3);transition:var(--tr)}
+.prin-reason-item .btn-del:hover{color:var(--coral);background:var(--coral-bg)}
+.prin-reason-item.removing{animation:prinOut .2s ease both}
 .prin-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.prin-section-title{display:flex;align-items:center;gap:10px}
-.prin-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.prin-do-item,.prin-not-item{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border-radius:var(--r-sm);border:1px solid transparent;margin-bottom:7px;transition:background .2s,border-color .2s,box-shadow .2s,transform .15s;animation:prinIn .26s cubic-bezier(.2,.8,.4,1) both;cursor:default}
-.prin-do-item{background:#F0FDF4}
-.prin-do-item:hover{background:#DCFCE7;border-color:rgba(22,163,74,.2);transform:translateX(2px)}
-.prin-do-item:focus-within{background:#DCFCE7;border-color:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.12);transform:none}
-.prin-not-item{background:#FFF1F2}
-.prin-not-item:hover{background:#FFE4E6;border-color:rgba(225,29,72,.2);transform:translateX(2px)}
-.prin-not-item:focus-within{background:#FFE4E6;border-color:var(--coral);box-shadow:0 0 0 3px rgba(225,29,72,.12);transform:none}
-.prin-do-icon,.prin-not-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px}
-.prin-do-icon{background:var(--green);color:#fff}
-.prin-not-icon{background:var(--coral);color:#fff}
-.prin-do-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.6;color:#166534;outline:none;min-height:34px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
-.prin-not-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.6;color:#9F1239;outline:none;min-height:34px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
-.prin-do-item textarea::placeholder{color:rgba(22,163,74,.4)}
-.prin-not-item textarea::placeholder{color:rgba(225,29,72,.35)}
-.prin-do-item .btn-del,.prin-not-item .btn-del{color:var(--t3);opacity:.5;transition:var(--tr)}
-.prin-do-item .btn-del:hover{opacity:1;color:var(--coral);background:var(--coral-bg)}
-.prin-not-item .btn-del:hover{opacity:1;color:var(--coral);background:var(--coral-bg)}
-.prin-do-item.removing,.prin-not-item.removing{animation:prinOut .2s cubic-bezier(.4,0,.6,1) both}
-.prin-empty{text-align:center;padding:24px 0 8px;color:var(--t3);font-size:13px}
-.prin-card-do{background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid rgba(22,163,74,.15)}
-.prin-card-not{background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid rgba(225,29,72,.15)}
+.prin-section-title{display:flex;align-items:center;gap:9px}
+.prin-section-icon{font-size:20px;line-height:1}
+.prin-do-item,.prin-not-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-sm);margin-bottom:7px;transition:background .18s,box-shadow .18s,border-color .18s;animation:prinIn .25s ease both}
+.prin-do-item{border-left:3px solid var(--green)}
+.prin-do-item:hover,.prin-do-item:focus-within{background:#fff;border-color:var(--bd2);border-left-color:var(--green);box-shadow:var(--shadow)}
+.prin-not-item{border-left:3px solid var(--coral)}
+.prin-not-item:hover,.prin-not-item:focus-within{background:#fff;border-color:var(--bd2);border-left-color:var(--coral);box-shadow:var(--shadow)}
+.prin-do-icon{color:var(--green);font-size:13px;font-weight:700;flex-shrink:0;margin-top:3px;line-height:1}
+.prin-not-icon{color:var(--coral);font-size:13px;font-weight:700;flex-shrink:0;margin-top:3px;line-height:1}
+.prin-do-item textarea,.prin-not-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.6;color:var(--t1);outline:none;min-height:34px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
+.prin-do-item textarea::placeholder,.prin-not-item textarea::placeholder{color:var(--t3)}
+.prin-do-item .btn-del,.prin-not-item .btn-del{color:var(--t3);transition:var(--tr)}
+.prin-do-item .btn-del:hover,.prin-not-item .btn-del:hover{color:var(--coral);background:var(--coral-bg)}
+.prin-do-item.removing,.prin-not-item.removing{animation:prinOut .2s ease both}
+.prin-empty{padding:20px 0 6px;color:var(--t3);font-size:13px}
+.prin-card-do{background:var(--s);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid var(--bd)}
+.prin-card-not{background:var(--s);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid var(--bd)}
 </style>
 </head>
 <body>
@@ -1219,26 +1213,26 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
     <div class="prin-card-do" style="margin:0">
       <div class="prin-section-hd">
         <div class="prin-section-title">
-          <div class="prin-icon" style="background:#DCFCE7">✅</div>
+          <span class="prin-section-icon">✅</span>
           <div>
-            <div style="font-size:15px;font-weight:700;color:#14532D">Should do</div>
-            <div style="font-size:11px;color:#4ADE80;margin-top:1px;font-weight:500">Cam kết với bản thân</div>
+            <div style="font-size:14px;font-weight:600;color:var(--t1)">Should do</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:1px">Cam kết với bản thân</div>
           </div>
         </div>
-        <button class="btn btn-a" style="font-size:12px;background:var(--green);border-color:var(--green)" onclick="addShouldDo()">+ Thêm</button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="addShouldDo()">+ Thêm</button>
       </div>
       <div id="should-do-list"></div>
     </div>
     <div class="prin-card-not" style="margin:0">
       <div class="prin-section-hd">
         <div class="prin-section-title">
-          <div class="prin-icon" style="background:#FFE4E6">🚫</div>
+          <span class="prin-section-icon">🚫</span>
           <div>
-            <div style="font-size:15px;font-weight:700;color:#881337">Should not do</div>
-            <div style="font-size:11px;color:#FB7185;margin-top:1px;font-weight:500">Những thứ cần tránh xa</div>
+            <div style="font-size:14px;font-weight:600;color:var(--t1)">Should not do</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:1px">Những thứ cần tránh xa</div>
           </div>
         </div>
-        <button class="btn btn-a" style="font-size:12px;background:var(--coral);border-color:var(--coral)" onclick="addShouldNot()">+ Thêm</button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="addShouldNot()">+ Thêm</button>
       </div>
       <div id="should-not-list"></div>
     </div>
