@@ -559,22 +559,24 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 /* ── PRINCIPLES ── */
 @keyframes prinIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes prinOut{from{opacity:1;transform:translateY(0) scale(1);max-height:200px;margin-bottom:8px}to{opacity:0;transform:translateY(-8px) scale(.95);max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0}}
-.prin-hero{background:linear-gradient(135deg,#1a0a0f 0%,#2d0f1a 40%,#1f0d1f 100%);border-radius:var(--r);padding:28px 24px 22px;margin-bottom:0;position:relative;overflow:hidden}
-.prin-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(244,63,94,.18) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(251,113,133,.12) 0%,transparent 50%);pointer-events:none}
-.prin-hero-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(244,63,94,.7);font-weight:600;margin-bottom:8px;position:relative}
-.prin-hero-title{font-family:'Playfair Display',serif;font-size:22px;color:#fff;font-weight:600;line-height:1.3;margin-bottom:6px;position:relative}
-.prin-hero-sub{font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;position:relative}
-.prin-hero-btn{position:absolute;top:20px;right:20px;background:rgba(244,63,94,.2);border:1px solid rgba(244,63,94,.35);color:#FB7185;font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:var(--tr);touch-action:manipulation}
-.prin-hero-btn:hover{background:rgba(244,63,94,.32);border-color:rgba(244,63,94,.6);box-shadow:0 0 16px rgba(244,63,94,.25)}
-.prin-reasons-list{padding:16px 0 4px}
-.prin-reason-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;margin-bottom:8px;transition:background .22s,border-color .22s,box-shadow .22s;animation:prinIn .28s cubic-bezier(.2,.8,.4,1) both}
-.prin-reason-item:hover{background:rgba(255,255,255,.07);border-color:rgba(244,63,94,.25)}
-.prin-reason-item:focus-within{background:rgba(244,63,94,.08);border-color:rgba(244,63,94,.4);box-shadow:0 0 0 3px rgba(244,63,94,.12),0 4px 20px rgba(244,63,94,.1)}
-.prin-reason-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;box-shadow:0 2px 8px rgba(244,63,94,.4)}
-.prin-reason-item textarea{flex:1;border:none;background:transparent;font-size:14px;line-height:1.7;color:rgba(255,255,255,.9);outline:none;min-height:44px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
-.prin-reason-item textarea::placeholder{color:rgba(255,255,255,.25)}
-.prin-reason-item .btn-del{color:rgba(255,255,255,.25);transition:var(--tr)}
-.prin-reason-item .btn-del:hover{color:#FB7185;background:rgba(244,63,94,.15)}
+.prin-hero{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);border:1px solid #FFE4E6;overflow:hidden;margin-bottom:0}
+.prin-hero-band{background:linear-gradient(90deg,#F43F5E 0%,#FB7185 50%,#FDA4AF 100%);height:4px}
+.prin-hero-inner{padding:22px 22px 18px}
+.prin-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.prin-hero-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#F43F5E;font-weight:600;margin-bottom:4px}
+.prin-hero-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--t1);font-weight:600;line-height:1.3}
+.prin-hero-sub{font-size:11px;color:var(--t3);margin-top:5px;line-height:1.6}
+.prin-hero-btn{background:#FFF1F2;border:1px solid #FECDD3;color:#F43F5E;font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:var(--tr);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
+.prin-hero-btn:hover{background:#FFE4E6;border-color:#FDA4AF;box-shadow:0 2px 12px rgba(244,63,94,.2)}
+.prin-reasons-list{display:flex;flex-direction:column;gap:8px}
+.prin-reason-item{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;background:#FFF5F5;border:1px solid #FFE4E6;border-radius:10px;transition:border-color .2s,box-shadow .2s,background .2s;animation:prinIn .28s cubic-bezier(.2,.8,.4,1) both}
+.prin-reason-item:hover{background:#FFF1F2;border-color:#FECDD3}
+.prin-reason-item:focus-within{background:#fff;border-color:#F43F5E;box-shadow:0 0 0 3px rgba(244,63,94,.1)}
+.prin-reason-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;box-shadow:0 2px 8px rgba(244,63,94,.3)}
+.prin-reason-item textarea{flex:1;border:none;background:transparent;font-size:14px;line-height:1.7;color:var(--t1);outline:none;min-height:44px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
+.prin-reason-item textarea::placeholder{color:#FCA5A5}
+.prin-reason-item .btn-del{color:#FCA5A5;transition:var(--tr)}
+.prin-reason-item .btn-del:hover{color:#F43F5E;background:#FFE4E6}
 .prin-reason-item.removing{animation:prinOut .22s cubic-bezier(.4,0,.6,1) both}
 .prin-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .prin-section-title{display:flex;align-items:center;gap:10px}
@@ -1196,13 +1198,20 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 <!-- ══ PRINCIPLES ══ -->
 <div class="page" id="p-principles">
 
-  <!-- REASONS HERO -->
+  <!-- REASONS -->
   <div class="prin-hero">
-    <button class="prin-hero-btn" onclick="addReason()">+ Thêm lý do</button>
-    <div class="prin-hero-label">Principles · Reasons</div>
-    <div class="prin-hero-title">Tại sao tôi làm<br>tất cả điều này?</div>
-    <div class="prin-hero-sub">Đọc lại khi mệt mỏi · Khi muốn bỏ cuộc · Khi quên mình đang đi đâu</div>
-    <div class="prin-reasons-list" id="reasons-list"></div>
+    <div class="prin-hero-band"></div>
+    <div class="prin-hero-inner">
+      <div class="prin-hero-top">
+        <div>
+          <div class="prin-hero-label">❤️ Reasons</div>
+          <div class="prin-hero-title">Tại sao tôi làm tất cả điều này?</div>
+          <div class="prin-hero-sub">Đọc lại khi mệt mỏi · Khi muốn bỏ cuộc · Khi quên mình đang đi đâu</div>
+        </div>
+        <button class="prin-hero-btn" onclick="addReason()">+ Thêm</button>
+      </div>
+      <div class="prin-reasons-list" id="reasons-list"></div>
+    </div>
   </div>
 
   <!-- SHOULD DO / SHOULD NOT -->
@@ -1896,7 +1905,7 @@ function renderPrinciples(){renderReasons();renderShouldDo();renderShouldNot();}
 function renderReasons(){
   const el=document.getElementById('reasons-list');
   if(!el)return;
-  if(!D.per.reasons.length){el.innerHTML='<div class="prin-empty" style="color:rgba(255,255,255,.25);padding:16px 0 4px">Bấm "+ Thêm lý do" để bắt đầu...</div>';return;}
+  if(!D.per.reasons.length){el.innerHTML='<div class="prin-empty" style="color:#FCA5A5">Bấm "+ Thêm" để viết lý do đầu tiên của bạn.</div>';return;}
   el.innerHTML=D.per.reasons.map((r,i)=>`
     <div class="prin-reason-item" style="animation-delay:${i*40}ms">
       <div class="prin-reason-num">${i+1}</div>
@@ -1942,8 +1951,8 @@ function addShouldNot(){
   setTimeout(()=>{const ls=document.querySelectorAll('#should-not-list textarea');if(ls.length)ls[ls.length-1].focus();},60);
 }
 function prinRemove(listId,idx,key){
-  const items=document.querySelectorAll('#'+listId+' [class*="prin-"]');
-  const el=items[idx];
+  const list=document.getElementById(listId);
+  const el=list?list.children[idx]:null;
   if(!el){D.per[key].splice(idx,1);save();renderPrinciples();return;}
   el.classList.add('removing');
   setTimeout(()=>{D.per[key].splice(idx,1);save();renderPrinciples();},200);
