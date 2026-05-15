@@ -557,22 +557,49 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   input[type=text],input[type=number],input[type=date],input[type=time],textarea,select{font-size:16px!important}
 }
 /* ── PRINCIPLES ── */
-.prin-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+@keyframes prinIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes prinOut{from{opacity:1;transform:translateY(0) scale(1);max-height:200px;margin-bottom:8px}to{opacity:0;transform:translateY(-8px) scale(.95);max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0}}
+.prin-hero{background:linear-gradient(135deg,#1a0a0f 0%,#2d0f1a 40%,#1f0d1f 100%);border-radius:var(--r);padding:28px 24px 22px;margin-bottom:0;position:relative;overflow:hidden}
+.prin-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(244,63,94,.18) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(251,113,133,.12) 0%,transparent 50%);pointer-events:none}
+.prin-hero-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(244,63,94,.7);font-weight:600;margin-bottom:8px;position:relative}
+.prin-hero-title{font-family:'Playfair Display',serif;font-size:22px;color:#fff;font-weight:600;line-height:1.3;margin-bottom:6px;position:relative}
+.prin-hero-sub{font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;position:relative}
+.prin-hero-btn{position:absolute;top:20px;right:20px;background:rgba(244,63,94,.2);border:1px solid rgba(244,63,94,.35);color:#FB7185;font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:var(--tr);touch-action:manipulation}
+.prin-hero-btn:hover{background:rgba(244,63,94,.32);border-color:rgba(244,63,94,.6);box-shadow:0 0 16px rgba(244,63,94,.25)}
+.prin-reasons-list{padding:16px 0 4px}
+.prin-reason-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;margin-bottom:8px;transition:background .22s,border-color .22s,box-shadow .22s;animation:prinIn .28s cubic-bezier(.2,.8,.4,1) both}
+.prin-reason-item:hover{background:rgba(255,255,255,.07);border-color:rgba(244,63,94,.25)}
+.prin-reason-item:focus-within{background:rgba(244,63,94,.08);border-color:rgba(244,63,94,.4);box-shadow:0 0 0 3px rgba(244,63,94,.12),0 4px 20px rgba(244,63,94,.1)}
+.prin-reason-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;box-shadow:0 2px 8px rgba(244,63,94,.4)}
+.prin-reason-item textarea{flex:1;border:none;background:transparent;font-size:14px;line-height:1.7;color:rgba(255,255,255,.9);outline:none;min-height:44px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
+.prin-reason-item textarea::placeholder{color:rgba(255,255,255,.25)}
+.prin-reason-item .btn-del{color:rgba(255,255,255,.25);transition:var(--tr)}
+.prin-reason-item .btn-del:hover{color:#FB7185;background:rgba(244,63,94,.15)}
+.prin-reason-item.removing{animation:prinOut .22s cubic-bezier(.4,0,.6,1) both}
+.prin-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .prin-section-title{display:flex;align-items:center;gap:10px}
-.prin-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.prin-reason-item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--s2);border-radius:var(--r-sm);border:1px solid transparent;margin-bottom:8px;transition:border-color var(--tr),background var(--tr),box-shadow var(--tr)}
-.prin-reason-item:focus-within{background:#fff;border-color:#F43F5E44;box-shadow:0 0 0 3px #F43F5E18}
-.prin-reason-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.prin-reason-item textarea{flex:1;border:none;background:transparent;font-size:14px;line-height:1.65;color:var(--t1);outline:none;min-height:44px;resize:none;overflow:hidden}
-.prin-do-item,.prin-not-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--r-sm);border:1px solid transparent;margin-bottom:7px;transition:border-color var(--tr),background var(--tr),box-shadow var(--tr)}
-.prin-do-item{background:color-mix(in srgb,var(--green) 8%,var(--s2))}
-.prin-do-item:focus-within{background:color-mix(in srgb,var(--green) 12%,#fff);border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 15%,transparent)}
-.prin-not-item{background:color-mix(in srgb,var(--coral) 8%,var(--s2))}
-.prin-not-item:focus-within{background:color-mix(in srgb,var(--coral) 12%,#fff);border-color:var(--coral);box-shadow:0 0 0 3px color-mix(in srgb,var(--coral) 15%,transparent)}
-.prin-do-dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px}
-.prin-not-dot{width:10px;height:10px;border-radius:50%;background:var(--coral);flex-shrink:0;margin-top:5px}
-.prin-do-item textarea,.prin-not-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.6;color:var(--t1);outline:none;min-height:36px;resize:none;overflow:hidden}
-.prin-empty{text-align:center;padding:28px 0;color:var(--t3);font-size:13px}
+.prin-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.prin-do-item,.prin-not-item{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border-radius:var(--r-sm);border:1px solid transparent;margin-bottom:7px;transition:background .2s,border-color .2s,box-shadow .2s,transform .15s;animation:prinIn .26s cubic-bezier(.2,.8,.4,1) both;cursor:default}
+.prin-do-item{background:#F0FDF4}
+.prin-do-item:hover{background:#DCFCE7;border-color:rgba(22,163,74,.2);transform:translateX(2px)}
+.prin-do-item:focus-within{background:#DCFCE7;border-color:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.12);transform:none}
+.prin-not-item{background:#FFF1F2}
+.prin-not-item:hover{background:#FFE4E6;border-color:rgba(225,29,72,.2);transform:translateX(2px)}
+.prin-not-item:focus-within{background:#FFE4E6;border-color:var(--coral);box-shadow:0 0 0 3px rgba(225,29,72,.12);transform:none}
+.prin-do-icon,.prin-not-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px}
+.prin-do-icon{background:var(--green);color:#fff}
+.prin-not-icon{background:var(--coral);color:#fff}
+.prin-do-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.6;color:#166534;outline:none;min-height:34px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
+.prin-not-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.6;color:#9F1239;outline:none;min-height:34px;resize:none;overflow:hidden;font-family:'Inter',sans-serif}
+.prin-do-item textarea::placeholder{color:rgba(22,163,74,.4)}
+.prin-not-item textarea::placeholder{color:rgba(225,29,72,.35)}
+.prin-do-item .btn-del,.prin-not-item .btn-del{color:var(--t3);opacity:.5;transition:var(--tr)}
+.prin-do-item .btn-del:hover{opacity:1;color:var(--coral);background:var(--coral-bg)}
+.prin-not-item .btn-del:hover{opacity:1;color:var(--coral);background:var(--coral-bg)}
+.prin-do-item.removing,.prin-not-item.removing{animation:prinOut .2s cubic-bezier(.4,0,.6,1) both}
+.prin-empty{text-align:center;padding:24px 0 8px;color:var(--t3);font-size:13px}
+.prin-card-do{background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid rgba(22,163,74,.15)}
+.prin-card-not{background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid rgba(225,29,72,.15)}
 </style>
 </head>
 <body>
@@ -1168,48 +1195,41 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 
 <!-- ══ PRINCIPLES ══ -->
 <div class="page" id="p-principles">
-  <div class="ph"><div class="pe">Nền tảng</div><div class="pt">Principles</div><div class="pd">Lý do sâu xa, cam kết với bản thân, và những thứ cần tránh — đọc lại khi mệt mỏi hoặc mất phương hướng.</div></div>
 
-  <!-- REASONS -->
-  <div class="card" style="border-top:3px solid #F43F5E;padding-top:18px">
-    <div class="prin-section-hd">
-      <div class="prin-section-title">
-        <div class="prin-icon" style="background:linear-gradient(135deg,#F43F5E22,#FB718522)">❤️</div>
-        <div>
-          <div style="font-size:15px;font-weight:700;color:var(--t1)">Reasons</div>
-          <div style="font-size:11px;color:var(--t3);margin-top:1px">Tại sao tôi làm tất cả điều này?</div>
-        </div>
-      </div>
-      <button class="btn btn-a" style="font-size:12px" onclick="addReason()">+ Thêm</button>
-    </div>
-    <div id="reasons-list"></div>
+  <!-- REASONS HERO -->
+  <div class="prin-hero">
+    <button class="prin-hero-btn" onclick="addReason()">+ Thêm lý do</button>
+    <div class="prin-hero-label">Principles · Reasons</div>
+    <div class="prin-hero-title">Tại sao tôi làm<br>tất cả điều này?</div>
+    <div class="prin-hero-sub">Đọc lại khi mệt mỏi · Khi muốn bỏ cuộc · Khi quên mình đang đi đâu</div>
+    <div class="prin-reasons-list" id="reasons-list"></div>
   </div>
 
   <!-- SHOULD DO / SHOULD NOT -->
-  <div class="g2" style="gap:14px">
-    <div class="card" style="margin:0;border-top:3px solid var(--green);padding-top:18px">
+  <div class="g2" style="gap:14px;margin-top:14px">
+    <div class="prin-card-do" style="margin:0">
       <div class="prin-section-hd">
         <div class="prin-section-title">
-          <div class="prin-icon" style="background:color-mix(in srgb,var(--green) 15%,transparent)">✅</div>
+          <div class="prin-icon" style="background:#DCFCE7">✅</div>
           <div>
-            <div style="font-size:15px;font-weight:700;color:var(--t1)">Should do</div>
-            <div style="font-size:11px;color:var(--t3);margin-top:1px">Cam kết với bản thân</div>
+            <div style="font-size:15px;font-weight:700;color:#14532D">Should do</div>
+            <div style="font-size:11px;color:#4ADE80;margin-top:1px;font-weight:500">Cam kết với bản thân</div>
           </div>
         </div>
-        <button class="btn btn-a" style="font-size:12px" onclick="addShouldDo()">+ Thêm</button>
+        <button class="btn btn-a" style="font-size:12px;background:var(--green);border-color:var(--green)" onclick="addShouldDo()">+ Thêm</button>
       </div>
       <div id="should-do-list"></div>
     </div>
-    <div class="card" style="margin:0;border-top:3px solid var(--coral);padding-top:18px">
+    <div class="prin-card-not" style="margin:0">
       <div class="prin-section-hd">
         <div class="prin-section-title">
-          <div class="prin-icon" style="background:color-mix(in srgb,var(--coral) 15%,transparent)">🚫</div>
+          <div class="prin-icon" style="background:#FFE4E6">🚫</div>
           <div>
-            <div style="font-size:15px;font-weight:700;color:var(--t1)">Should not do</div>
-            <div style="font-size:11px;color:var(--t3);margin-top:1px">Những thứ cần tránh xa</div>
+            <div style="font-size:15px;font-weight:700;color:#881337">Should not do</div>
+            <div style="font-size:11px;color:#FB7185;margin-top:1px;font-weight:500">Những thứ cần tránh xa</div>
           </div>
         </div>
-        <button class="btn btn-a" style="font-size:12px" onclick="addShouldNot()">+ Thêm</button>
+        <button class="btn btn-a" style="font-size:12px;background:var(--coral);border-color:var(--coral)" onclick="addShouldNot()">+ Thêm</button>
       </div>
       <div id="should-not-list"></div>
     </div>
@@ -1876,42 +1896,58 @@ function renderPrinciples(){renderReasons();renderShouldDo();renderShouldNot();}
 function renderReasons(){
   const el=document.getElementById('reasons-list');
   if(!el)return;
-  if(!D.per.reasons.length){el.innerHTML='<div class="prin-empty">Chưa có lý do nào. Hãy thêm lý do sâu xa của bạn.</div>';return;}
+  if(!D.per.reasons.length){el.innerHTML='<div class="prin-empty" style="color:rgba(255,255,255,.25);padding:16px 0 4px">Bấm "+ Thêm lý do" để bắt đầu...</div>';return;}
   el.innerHTML=D.per.reasons.map((r,i)=>`
-    <div class="prin-reason-item">
+    <div class="prin-reason-item" style="animation-delay:${i*40}ms">
       <div class="prin-reason-num">${i+1}</div>
       <textarea oninput="D.per.reasons[${i}].text=this.value;save();autoResize(this)" placeholder="Lý do của tôi...">${escapeHtml(r.text||'')}</textarea>
-      <button class="btn-del" onclick="D.per.reasons.splice(${i},1);save();renderReasons()">✕</button>
+      <button class="btn-del" onclick="prinRemove('reasons-list',${i},'reasons')">✕</button>
     </div>`).join('');
   setTimeout(()=>el.querySelectorAll('textarea').forEach(t=>autoResize(t)),0);
 }
-function addReason(){D.per.reasons.push({text:''});save();renderReasons();setTimeout(()=>{const ls=document.querySelectorAll('#reasons-list textarea');if(ls.length)ls[ls.length-1].focus();},50);}
+function addReason(){
+  D.per.reasons.push({text:''});save();renderReasons();
+  setTimeout(()=>{const ls=document.querySelectorAll('#reasons-list textarea');if(ls.length)ls[ls.length-1].focus();},60);
+}
 function renderShouldDo(){
   const el=document.getElementById('should-do-list');
   if(!el)return;
   if(!D.per.should_do.length){el.innerHTML='<div class="prin-empty">Chưa có cam kết nào.</div>';return;}
   el.innerHTML=D.per.should_do.map((r,i)=>`
-    <div class="prin-do-item">
-      <div class="prin-do-dot"></div>
-      <textarea oninput="D.per.should_do[${i}].text=this.value;save();autoResize(this)" placeholder="Tôi cam kết...">${escapeHtml(r.text||'')}</textarea>
-      <button class="btn-del" onclick="D.per.should_do.splice(${i},1);save();renderShouldDo()">✕</button>
+    <div class="prin-do-item" style="animation-delay:${i*40}ms">
+      <div class="prin-do-icon">✓</div>
+      <textarea oninput="D.per.should_do[${i}].text=this.value;save();autoResize(this)" placeholder="Tôi cam kết làm điều này...">${escapeHtml(r.text||'')}</textarea>
+      <button class="btn-del" onclick="prinRemove('should-do-list',${i},'should_do')">✕</button>
     </div>`).join('');
   setTimeout(()=>el.querySelectorAll('textarea').forEach(t=>autoResize(t)),0);
 }
-function addShouldDo(){D.per.should_do.push({text:''});save();renderShouldDo();setTimeout(()=>{const ls=document.querySelectorAll('#should-do-list textarea');if(ls.length)ls[ls.length-1].focus();},50);}
+function addShouldDo(){
+  D.per.should_do.push({text:''});save();renderShouldDo();
+  setTimeout(()=>{const ls=document.querySelectorAll('#should-do-list textarea');if(ls.length)ls[ls.length-1].focus();},60);
+}
 function renderShouldNot(){
   const el=document.getElementById('should-not-list');
   if(!el)return;
   if(!D.per.should_not.length){el.innerHTML='<div class="prin-empty">Chưa có gì để tránh.</div>';return;}
   el.innerHTML=D.per.should_not.map((r,i)=>`
-    <div class="prin-not-item">
-      <div class="prin-not-dot"></div>
-      <textarea oninput="D.per.should_not[${i}].text=this.value;save();autoResize(this)" placeholder="Tôi sẽ tránh...">${escapeHtml(r.text||'')}</textarea>
-      <button class="btn-del" onclick="D.per.should_not.splice(${i},1);save();renderShouldNot()">✕</button>
+    <div class="prin-not-item" style="animation-delay:${i*40}ms">
+      <div class="prin-not-icon">✕</div>
+      <textarea oninput="D.per.should_not[${i}].text=this.value;save();autoResize(this)" placeholder="Tôi sẽ tránh xa điều này...">${escapeHtml(r.text||'')}</textarea>
+      <button class="btn-del" onclick="prinRemove('should-not-list',${i},'should_not')">✕</button>
     </div>`).join('');
   setTimeout(()=>el.querySelectorAll('textarea').forEach(t=>autoResize(t)),0);
 }
-function addShouldNot(){D.per.should_not.push({text:''});save();renderShouldNot();setTimeout(()=>{const ls=document.querySelectorAll('#should-not-list textarea');if(ls.length)ls[ls.length-1].focus();},50);}
+function addShouldNot(){
+  D.per.should_not.push({text:''});save();renderShouldNot();
+  setTimeout(()=>{const ls=document.querySelectorAll('#should-not-list textarea');if(ls.length)ls[ls.length-1].focus();},60);
+}
+function prinRemove(listId,idx,key){
+  const items=document.querySelectorAll('#'+listId+' [class*="prin-"]');
+  const el=items[idx];
+  if(!el){D.per[key].splice(idx,1);save();renderPrinciples();return;}
+  el.classList.add('removing');
+  setTimeout(()=>{D.per[key].splice(idx,1);save();renderPrinciples();},200);
+}
 
 // ── PERSONAL DEV ──
 function renderPersonal(){
