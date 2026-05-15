@@ -318,8 +318,9 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 .rt-rest{background:#8B5CF6}
 .rt-meal{background:var(--coral)}
 .rt-learn{background:#3B82F6}
-.routine-time{border:none;border-right:1px solid var(--bd);border-radius:0;background:var(--s2);font-size:13px;font-weight:600;color:var(--t2);text-align:center;padding:10px 6px;font-family:'Inter',sans-serif;outline:none}
+.routine-time{border:none;border-right:1px solid var(--bd);border-radius:0;background:var(--s2);font-size:13px;font-weight:600;color:var(--t2);padding:10px 6px;font-family:'Inter',sans-serif;outline:none;cursor:pointer;min-width:0}
 .routine-time:focus{background:#fff;color:var(--t1);box-shadow:none}
+.routine-time::-webkit-calendar-picker-indicator{opacity:.5;cursor:pointer;margin:0;padding:0}
 .routine-type{border:none;border-right:1px solid var(--bd);border-radius:0;background:var(--s2);font-size:12px;font-weight:500;color:var(--t2);padding:10px 8px;font-family:'Inter',sans-serif;cursor:pointer;outline:none;width:100%}
 .routine-type:focus{background:#fff;box-shadow:none}
 .routine-label{border:none;border-radius:0;background:transparent;font-size:14px;color:var(--t1);padding:10px 13px;font-family:'Inter',sans-serif;outline:none;width:100%}
@@ -1264,6 +1265,11 @@ function dateStr(d){
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 function today(){return dateStr(new Date())}
+function toTimeVal(t){
+  if(!t)return '';
+  const m=String(t).match(/^(\d{1,2}):(\d{2})$/);
+  return m?m[1].padStart(2,'0')+':'+m[2]:'';
+}
 
 // ── DATA ──
 let D = {
@@ -2037,7 +2043,7 @@ function renderRoutine(){
     const t=b.type||'deep';
     const opts=BLOCK_TYPE_OPTS.replace(`value="${t}"`,`value="${t}" selected`);
     return `<div class="routine-row" style="border-left:4px solid var(--accent-${t})">
-      <input class="routine-time" type="text" value="${escapeAttr(b.time)}" oninput="updateBlock('${b.id}','time',this.value)" placeholder="6:00">
+      <input class="routine-time" type="time" value="${toTimeVal(b.time)}" onchange="updateBlock('${b.id}','time',this.value)">
       <select class="routine-type" onchange="updateBlock('${b.id}','type',this.value);renderRoutine()">${opts}</select>
       <input class="routine-label" type="text" value="${escapeAttr(b.label)}" oninput="updateBlock('${b.id}','label',this.value)" placeholder="Mô tả hoạt động...">
       <button class="routine-del" onclick="deleteBlock('${b.id}')">✕</button>
@@ -2352,7 +2358,7 @@ function renderDayBlocks(){
   el.innerHTML=data.map(b=>{
     const t=b.type||'deep';const opts=BLOCK_TYPE_OPTS.replace(`value="${t}"`,`value="${t}" selected`);
     return `<div class="routine-row" style="border-left:4px solid var(--accent-${t})">
-      <input class="routine-time" type="text" value="${escapeAttr(b.time)}" oninput="updateDayBlock('${b.id}','time',this.value)" placeholder="6:00">
+      <input class="routine-time" type="time" value="${toTimeVal(b.time)}" onchange="updateDayBlock('${b.id}','time',this.value)">
       <select class="routine-type" onchange="updateDayBlock('${b.id}','type',this.value);renderDayBlocks()">${opts}</select>
       <input class="routine-label" type="text" value="${escapeAttr(b.label)}" oninput="updateDayBlock('${b.id}','label',this.value)" placeholder="Mô tả hoạt động...">
       <button class="routine-del" onclick="deleteDayBlock('${b.id}')">✕</button>
