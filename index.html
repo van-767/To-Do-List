@@ -575,6 +575,15 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   /* input font-size stays 16px to prevent iOS zoom */
   input[type=text],input[type=number],input[type=date],input[type=time],textarea,select{font-size:16px!important}
 }
+/* ── NOTIFICATIONS ── */
+.notif-bar{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--s2);border-radius:var(--r-sm);margin-bottom:14px;flex-wrap:wrap;border:1px solid var(--bd)}
+.notif-bar-label{font-size:13px;font-weight:500;color:var(--t2);flex:1;min-width:120px}
+.notif-bar-sub{font-size:11px;color:var(--t3);font-weight:400}
+.notif-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:99px;letter-spacing:.3px}
+.notif-pill.granted{background:#DCFCE7;color:#16A34A}
+.notif-pill.denied{background:var(--red-bg);color:var(--coral)}
+.notif-pill.default{background:var(--s);color:var(--t3);border:1px solid var(--bd)}
+.notif-reminder-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-sm);margin-top:10px;flex-wrap:wrap}
 /* ── PRINCIPLES ── */
 @keyframes prinIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes prinOut{0%{opacity:1;max-height:120px;margin-bottom:8px;padding:12px 14px}100%{opacity:0;max-height:0;margin-bottom:0;padding:0 14px}}
@@ -1007,6 +1016,14 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 <!-- ══ ROUTINE ══ -->
 <div class="page" id="p-routine">
   <div class="ph"><div class="pe">Hành động</div><div class="pt">Kế hoạch ngày</div><div class="pd">Plan ngày cụ thể (lưu theo ngày) + Template T2-CN làm base.</div><div class="ftags"><span class="tag ta">Time Blocking — Cal Newport</span><span class="tag tt">Ultradian Rhythms</span></div></div>
+  <div class="notif-bar" id="daily-notif-bar">
+    <span style="font-size:18px;flex-shrink:0">🔔</span>
+    <div style="flex:1;min-width:120px">
+      <div class="notif-bar-label">Thông báo đúng giờ <span class="notif-pill" id="daily-notif-pill">...</span></div>
+      <div class="notif-bar-sub">Nhắc khi đến giờ từng block trong ngày</div>
+    </div>
+    <button class="btn btn-ghost" style="font-size:12px;flex-shrink:0" id="daily-notif-btn" onclick="toggleBlockNotif()">Bật</button>
+  </div>
   <div class="card">
     <div class="journal-nav" style="margin-bottom:10px">
       <button class="jnav-btn" onclick="dayMove(-1)">← Hôm qua</button>
@@ -1227,6 +1244,23 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
     </div>
   </div>
 
+  <!-- REASONS REMINDER -->
+  <div class="notif-reminder-row" id="reasons-reminder-row">
+    <span style="font-size:18px;flex-shrink:0">🔔</span>
+    <div style="flex:1;min-width:120px">
+      <div style="font-size:13px;font-weight:500;color:var(--t2)">Nhắc nhở Reasons <span class="notif-pill" id="reasons-notif-pill">...</span></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:2px">Hiện 1 lý do ngẫu nhiên để duy trì động lực</div>
+    </div>
+    <select id="reasons-interval-sel" onchange="setReasonsInterval(this.value)" style="font-size:12px;padding:6px 10px;border-radius:var(--r-xs);border:1px solid var(--bd);background:var(--s);color:var(--t2);cursor:pointer">
+      <option value="0">Tắt</option>
+      <option value="30">Mỗi 30 phút</option>
+      <option value="60">Mỗi 1 giờ</option>
+      <option value="120">Mỗi 2 giờ</option>
+      <option value="240">Mỗi 4 giờ</option>
+      <option value="480">Mỗi 8 giờ</option>
+    </select>
+  </div>
+
   <!-- SHOULD DO / SHOULD NOT -->
   <div class="g2" style="gap:14px;margin-top:14px">
     <div class="prin-card-do" style="margin:0">
@@ -1315,7 +1349,8 @@ let D = {
   journals:{},
   retros:{},
   nonneg:'',
-  todos:[]
+  todos:[],
+  notif:{block_notif:false,reasons_min:0}
 };
 
 let todoFilter = 'all';
@@ -1416,6 +1451,7 @@ function load(){
 function normalizeData(){
   D.habits = (D.habits||[]).map(h=>Object.assign({target:7,completions:{}}, h));
   D.todos = (D.todos||[]).map(t=>Object.assign({created:today(),done:false,subs:[]}, t));
+  D.notif = Object.assign({block_notif:false,reasons_min:0}, D.notif||{});
   D.todos.forEach(t=>{if(!Array.isArray(t.subs))t.subs=[];});
   D.things = D.things||[];
   D.journals = D.journals||{};
@@ -1510,7 +1546,7 @@ function nav(p){
   if(p==='weekly'){renderWeekly();renderEnergyBlocks();}
   if(p==='routine'){renderDayBlocks();renderDaySelector();renderRoutine();}
   if(p==='vision') renderVision();
-  if(p==='principles') renderPrinciples();
+  if(p==='principles'){renderPrinciples();renderNotifStatus();}
   if(p==='todo') renderTodos();
   setTimeout(initAutoResize, 50);
 }
@@ -2071,6 +2107,95 @@ function addSub(id){
 function toggleSub(tid,si){const t=D.todos.find(x=>x.id===tid);if(t&&t.subs[si]){t.subs[si].done=!t.subs[si].done;save();renderTodos();}}
 function updateSub(tid,si,val){const t=D.todos.find(x=>x.id===tid);if(t&&t.subs[si])t.subs[si].text=val;save();}
 function deleteSub(tid,si){const t=D.todos.find(x=>x.id===tid);if(t){t.subs.splice(si,1);save();renderTodos();}}
+// ── NOTIFICATIONS ──
+const _notifiedBlocks = new Set();
+let _blockTick, _reasonsTick;
+
+function notifPerm(){return('Notification' in window)?Notification.permission:'denied';}
+
+function showNotif(title, body){
+  if(notifPerm()!=='granted') return;
+  try{new Notification(title,{body,icon:'icons/mygoals-icon.svg',tag:title});}catch(e){}
+}
+
+function renderNotifStatus(){
+  const perm = notifPerm();
+  const cls = perm==='granted'?'granted':perm==='denied'?'denied':'default';
+  const lbl = perm==='granted'?'Đã bật':perm==='denied'?'Bị chặn':'Chưa bật';
+  document.querySelectorAll('.notif-pill').forEach(el=>{
+    el.className='notif-pill '+cls; el.textContent=lbl;
+  });
+  const btn=document.getElementById('daily-notif-btn');
+  if(btn) btn.textContent = perm==='granted'&&D.notif.block_notif ? 'Tắt' : 'Bật';
+  const sel=document.getElementById('reasons-interval-sel');
+  if(sel) sel.value = String(D.notif.reasons_min||0);
+}
+
+async function toggleBlockNotif(){
+  if(notifPerm()==='denied'){alert('Thông báo đang bị chặn. Vào cài đặt trình duyệt để cho phép.');return;}
+  if(notifPerm()==='default'){
+    const r = await Notification.requestPermission();
+    if(r!=='granted'){renderNotifStatus();return;}
+  }
+  D.notif.block_notif = !D.notif.block_notif;
+  save(); renderNotifStatus(); startBlockScheduler();
+}
+
+function startBlockScheduler(){
+  clearInterval(_blockTick);
+  if(notifPerm()!=='granted'||!D.notif.block_notif) return;
+  _blockTick = setInterval(tickBlockNotif, 30000);
+}
+
+function tickBlockNotif(){
+  if(notifPerm()!=='granted'||!D.notif.block_notif) return;
+  const now=new Date();
+  const hm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const todayKey=dateStr(now);
+  const blocks=D.days[todayKey]||[];
+  const typeLabel={deep:'🟠 Deep Work',health:'🟢 Sức khoẻ',admin:'🔵 Admin',rest:'🟣 Nghỉ ngơi',meal:'🔴 Ăn uống',learn:'💙 Học tập'};
+  blocks.forEach(b=>{
+    if(!b.time) return;
+    const key=todayKey+'-'+b.id+'-'+b.time;
+    if(b.time===hm && !_notifiedBlocks.has(key)){
+      _notifiedBlocks.add(key);
+      showNotif(typeLabel[b.type]||'⏰ Block tiếp theo', b.label||'Đến giờ rồi!');
+    }
+  });
+}
+
+async function setReasonsInterval(val){
+  if(notifPerm()==='default' && parseInt(val)>0){
+    const r=await Notification.requestPermission();
+    if(r!=='granted'){
+      document.getElementById('reasons-interval-sel').value='0';
+      renderNotifStatus(); return;
+    }
+  }
+  D.notif.reasons_min=parseInt(val)||0;
+  save(); renderNotifStatus(); startReasonsReminder();
+}
+
+function startReasonsReminder(){
+  clearInterval(_reasonsTick);
+  const min=parseInt(D.notif.reasons_min)||0;
+  if(!min||notifPerm()!=='granted') return;
+  _reasonsTick = setInterval(()=>{
+    const rs=(D.per.reasons||[]).filter(r=>r.text);
+    if(!rs.length) return;
+    const r=rs[Math.floor(Math.random()*rs.length)];
+    showNotif('💪 Reasons',r.text);
+  }, min*60*1000);
+}
+
+function initNotif(){
+  renderNotifStatus();
+  if(notifPerm()==='granted'){
+    startBlockScheduler();
+    startReasonsReminder();
+  }
+}
+
 function setTodoFilter(btn){
   document.querySelectorAll('.tf').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on'); todoFilter=btn.dataset.f; renderTodos();
@@ -2816,7 +2941,9 @@ renderVision();
 renderTodos();
 renderJournal();
 renderRetro();
+renderPrinciples();
 attachListeners();
+initNotif();
 initAutoResize();
 refreshDash();
 initMobileInstall();
