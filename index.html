@@ -930,31 +930,30 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 <div class="page" id="p-routine">
   <div class="ph"><div class="pe">Hành động</div><div class="pt">Kế hoạch ngày</div><div class="pd">Plan ngày cụ thể (lưu theo ngày) + Template T2-CN làm base.</div><div class="ftags"><span class="tag ta">Time Blocking — Cal Newport</span><span class="tag tt">Ultradian Rhythms</span></div></div>
   <div class="card">
-    <div class="ct" style="margin-bottom:12px"><div class="ca ca-a"></div>Plan ngày cụ thể</div>
     <div class="journal-nav" style="margin-bottom:10px">
       <button class="jnav-btn" onclick="dayMove(-1)">← Hôm qua</button>
       <div class="jdate" id="day-nav-label"></div>
       <button class="jnav-btn" onclick="dayMove(1)">Ngày mai →</button>
       <button class="jnav-btn" onclick="dayToday()">Hôm nay</button>
     </div>
-    <div id="day-week-ctx" style="margin-bottom:10px"></div>
+    <div id="day-week-ctx" style="margin-bottom:12px"></div>
     <div class="routine-list" id="day-blocks-list"></div>
     <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
       <button class="btn btn-a" style="font-size:12px" onclick="addDayBlock()">+ Thêm block</button>
-      <button class="btn btn-ghost" style="font-size:12px" onclick="applyDayTemplate()">Dùng template T2-CN</button>
+      <button class="btn btn-ghost" style="font-size:12px" id="apply-tmpl-btn" onclick="applyDayTemplate()">Dùng template</button>
     </div>
-  </div>
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div class="ct" style="margin:0"><div class="ca ca-a"></div>Template T2-CN (Ngày lý tưởng)</div>
-      <button class="btn btn-a" style="font-size:12px" onclick="addBlock()">+ Thêm block</button>
+    <div style="border-top:1px solid var(--bd);margin-top:18px;padding-top:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <span style="font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.6px">Template T2-CN</span>
+        <button class="btn btn-a" style="font-size:11px;padding:4px 10px" onclick="addBlock()">+ Thêm</button>
+      </div>
+      <div class="day-selector" id="routine-day-selector"></div>
+      <div class="routine-list" id="routine-list"></div>
     </div>
-    <div class="day-selector" id="routine-day-selector"></div>
-    <div class="routine-list" id="routine-list"></div>
-  </div>
-  <div class="card">
-    <div class="ct"><div class="ca ca-g"></div>Non-negotiables hàng ngày</div>
-    <textarea id="non-neg" placeholder="Những thói quen không thể bỏ:&#10;VD: Tập 30 phút, đọc 20 phút, viết journal..."></textarea>
+    <div style="border-top:1px solid var(--bd);margin-top:18px;padding-top:14px">
+      <div class="ct" style="margin-bottom:8px"><div class="ca ca-g"></div>Non-negotiables hàng ngày</div>
+      <textarea id="non-neg" placeholder="Những thói quen không thể bỏ:&#10;VD: Tập 30 phút, đọc 20 phút, viết journal..."></textarea>
+    </div>
   </div>
 </div>
 
@@ -2047,8 +2046,14 @@ function renderDayBlocks(){
   }
   const data=D.days[dayDate];
   const el=document.getElementById('day-blocks-list');if(!el)return;
+  // update apply-template button label with weekday name
+  const _d=new Date(dayDate+'T00:00:00');
+  const _dayVN=['CN','T2','T3','T4','T5','T6','T7'];
+  const _dn=_dayVN[_d.getDay()];
+  const applyBtn=document.getElementById('apply-tmpl-btn');
+  if(applyBtn) applyBtn.textContent=`Dùng template ${_dn}`;
   if(!data||!data.length){
-    el.innerHTML='<div style="font-size:13px;color:var(--t3);padding:10px 0">Chưa có plan. Bấm "Dùng template T2-CN" hoặc thêm block thủ công.</div>';
+    el.innerHTML=`<div style="font-size:13px;color:var(--t3);padding:10px 0">Chưa có plan cho ngày này. Bấm <b>Dùng template ${_dn}</b> hoặc thêm block thủ công.</div>`;
     return;
   }
   el.innerHTML=data.map(b=>{
