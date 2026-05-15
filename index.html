@@ -837,6 +837,23 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
       <div class="f"><div class="wl">P</div><div class="wn">Plan — If / Then</div><textarea id="per-pl" placeholder=""></textarea></div>
     </div>
   </div>
+  <div class="card" style="border-left:3px solid var(--purple)">
+    <div class="ct"><div class="ca ca-p"></div>Lý do &amp; Nguyên tắc</div>
+    <div class="f" style="margin-bottom:0">
+      <label style="color:var(--purple);font-size:10px;letter-spacing:.8px">❤️ Reasons — Tại sao tôi làm tất cả điều này?</label>
+      <textarea id="per-reasons" placeholder="Viết lý do sâu xa nhất... Nhìn lại đây khi mệt mỏi, khi muốn bỏ cuộc, khi quên đi mình đang đi đâu." style="min-height:100px;border-color:var(--purple);border-width:1.5px;font-size:14px;line-height:1.65"></textarea>
+    </div>
+    <div class="g2" style="gap:12px;margin-top:14px">
+      <div class="f" style="margin:0">
+        <label style="color:var(--green)">✅ Should do</label>
+        <textarea id="per-should-do" placeholder="Những việc tôi cam kết làm — thói quen, hành động, cách ứng xử..." style="min-height:80px"></textarea>
+      </div>
+      <div class="f" style="margin:0">
+        <label style="color:var(--coral)">🚫 Should not do</label>
+        <textarea id="per-should-not" placeholder="Những thứ tôi cần tránh — distraction, thói xấu, hành vi phá hoại..." style="min-height:80px"></textarea>
+      </div>
+    </div>
+  </div>
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px">
       <div class="ct" style="margin:0"><div class="ca ca-p"></div>Personal Dev OKRs</div>
@@ -1178,7 +1195,7 @@ function today(){return dateStr(new Date())}
 let D = {
   eco:{income:'',expense:'',savings:'',invest:'',vision:'',why:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',obj2:'',kr2a:'',kr2b:'',objectives:[]},
   things:[],
-  per:{vision:'',ww:'',wo:'',ob:'',pl:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',objectives:[],skills:[],books:[]},
+  per:{vision:'',ww:'',wo:'',ob:'',pl:'',reasons:'',should_do:'',should_not:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',objectives:[],skills:[],books:[]},
   weekly:{m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',energy:[{id:'e1',type:'peak',from:'06:00',to:'10:00',label:''},{id:'e2',type:'low',from:'14:00',to:'16:00',label:''}],note:'',mits:[''],rules:[{if:'',then:''}]},
   routine:[
     {id:'r1',time:'6:00',label:'Thức dậy — morning routine',type:'health'},
@@ -1236,6 +1253,7 @@ function collectSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
+    'per-reasons':'per.reasons','per-should-do':'per.should_do','per-should-not':'per.should_not',
     'non-neg':'nonneg',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
@@ -1259,6 +1277,7 @@ function fillSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
+    'per-reasons':'per.reasons','per-should-do':'per.should_do','per-should-not':'per.should_not',
     'non-neg':'nonneg',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
@@ -1304,7 +1323,7 @@ function normalizeData(){
   D.things = D.things||[];
   D.journals = D.journals||{};
   D.eco = Object.assign({objectives:[]}, D.eco||{});
-  D.per = Object.assign({objectives:[],skills:[],books:[]}, D.per||{});
+  D.per = Object.assign({objectives:[],skills:[],books:[],reasons:'',should_do:'',should_not:''}, D.per||{});
   D.eco.objectives = migrateObjectives('eco');
   D.per.objectives = migrateObjectives('per');
   D.retros = D.retros||{};
