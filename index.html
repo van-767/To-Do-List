@@ -286,9 +286,23 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 .tf{padding:6px 14px;min-height:32px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--bd);background:none;cursor:pointer;transition:var(--tr);color:var(--t2);font-family:inherit;touch-action:manipulation}
 .tf.on{background:var(--t1);color:#fff;border-color:var(--t1)}
 .todo-list{display:flex;flex-direction:column;gap:6px}
-.todo-item{display:flex;align-items:center;gap:10px;background:var(--s);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;transition:var(--tr)}
+.todo-item{background:var(--s);border:1px solid var(--bd);border-radius:8px;transition:border-color var(--tr),box-shadow var(--tr)}
 .todo-item.done-item{opacity:.5}
 .todo-item:hover{border-color:var(--bd2)}
+.todo-item.has-subs{border-color:var(--bd2)}
+.todo-main-row{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.todo-sub-toggle{background:none;border:none;color:var(--t3);cursor:pointer;font-size:11px;font-weight:600;padding:3px 7px;border-radius:5px;flex-shrink:0;transition:var(--tr);touch-action:manipulation;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.todo-sub-toggle:hover{background:var(--s2);color:var(--t2)}
+.todo-sub-toggle.open{color:var(--t2)}
+.todo-subs{border-top:1px solid var(--bd);padding:8px 14px 10px 44px;display:flex;flex-direction:column;gap:5px}
+.todo-sub-item{display:flex;align-items:center;gap:8px}
+.sub-chk{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--bd2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:var(--tr);touch-action:manipulation}
+.sub-chk.checked{background:var(--green);border-color:var(--green);color:#fff}
+.sub-inp{flex:1;border:none;background:transparent;font-size:13px;color:var(--t1);outline:none;padding:2px 0}
+.sub-inp.done-txt{text-decoration:line-through;color:var(--t3)}
+.sub-inp::placeholder{color:var(--t3)}
+.todo-add-sub{background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px;padding:3px 0;text-align:left;transition:var(--tr);touch-action:manipulation;margin-top:2px}
+.todo-add-sub:hover{color:var(--t2)}
 .todo-chk{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--bd2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--tr);font-size:12px;touch-action:manipulation}
 .todo-chk.checked{background:var(--green);border-color:var(--green);color:#fff}
 .todo-txt{flex:1;font-size:14px}
@@ -1401,7 +1415,8 @@ function load(){
 
 function normalizeData(){
   D.habits = (D.habits||[]).map(h=>Object.assign({target:7,completions:{}}, h));
-  D.todos = (D.todos||[]).map(t=>Object.assign({created:today(),done:false}, t));
+  D.todos = (D.todos||[]).map(t=>Object.assign({created:today(),done:false,subs:[]}, t));
+  D.todos.forEach(t=>{if(!Array.isArray(t.subs))t.subs=[];});
   D.things = D.things||[];
   D.journals = D.journals||{};
   D.eco = Object.assign({objectives:[]}, D.eco||{});
@@ -1990,6 +2005,7 @@ function addBook(){D.per.books.push({name:'',status:'todo'});save();renderBooks(
 function cycleBookStatus(i){const s=['todo','reading','done'];const cur=s.indexOf(D.per.books[i].status||'todo');D.per.books[i].status=s[(cur+1)%3];save();renderBooks();}
 
 // ── TODO ──
+const expandedTodos = new Set();
 function renderTodos(){
   const el = document.getElementById('todo-list');
   const catLabel = {e:'Economic',t:'Things',p:'Personal',o:'Khác'};
@@ -1997,14 +2013,33 @@ function renderTodos(){
   if(todoFilter==='done') items = items.filter(t=>t.done);
   else if(todoFilter!=='all') items = items.filter(t=>t.cat===todoFilter&&!t.done);
   else items = items.filter(t=>!t.done);
-  el.innerHTML = items.map(t=>`
-    <div class="todo-item ${t.done?'done-item':''}">
-      <div class="todo-chk ${t.done?'checked':''}" onclick="toggleTodo('${t.id}')">${t.done?'✓':''}</div>
-      <input class="todo-edit ${t.done?'todo-txt':''}" value="${escapeAttr(t.text)}" oninput="updateTodoText('${t.id}',this.value)" placeholder="Nội dung task...">
-      <span class="qbadge ${t.quad}b">${{q1:'Q1',q2:'Q2',q3:'Q3',q4:'Q4'}[t.quad]}</span>
-      <span class="catb cat-${t.cat}">${catLabel[t.cat]||'Khác'}</span>
-      <button class="btn-del" onclick="deleteTodo('${t.id}')">✕</button>
-    </div>`).join('')||(todoFilter==='done'?'<p style="color:var(--t3);font-size:13px">Chưa hoàn thành việc nào.</p>':'<p style="color:var(--t3);font-size:13px">Chưa có việc cần làm ở đây.</p>');
+  el.innerHTML = items.map(t=>{
+    const subs = t.subs||[];
+    const doneCount = subs.filter(s=>s.done).length;
+    const isOpen = expandedTodos.has(t.id);
+    const subsHtml = isOpen ? `
+      <div class="todo-subs">
+        ${subs.map((s,si)=>`
+          <div class="todo-sub-item">
+            <div class="sub-chk ${s.done?'checked':''}" onclick="toggleSub('${t.id}',${si})">${s.done?'✓':''}</div>
+            <input class="sub-inp ${s.done?'done-txt':''}" value="${escapeAttr(s.text)}" oninput="updateSub('${t.id}',${si},this.value)" placeholder="Subtask...">
+            <button class="btn-del" style="padding:4px 6px;font-size:11px" onclick="deleteSub('${t.id}',${si})">✕</button>
+          </div>`).join('')}
+        <button class="todo-add-sub" onclick="addSub('${t.id}')">+ Thêm subtask</button>
+      </div>` : '';
+    const toggleBtn = `<button class="todo-sub-toggle ${isOpen?'open':''}" onclick="toggleSubsPanel('${t.id}')">${isOpen?'▲':'▼'} ${subs.length?`${doneCount}/${subs.length}`:'sub'}</button>`;
+    return `<div class="todo-item ${t.done?'done-item':''} ${subs.length?'has-subs':''}">
+      <div class="todo-main-row">
+        <div class="todo-chk ${t.done?'checked':''}" onclick="toggleTodo('${t.id}')">${t.done?'✓':''}</div>
+        <input class="todo-edit ${t.done?'todo-txt':''}" value="${escapeAttr(t.text)}" oninput="updateTodoText('${t.id}',this.value)" placeholder="Nội dung task...">
+        <span class="qbadge ${t.quad}b">${{q1:'Q1',q2:'Q2',q3:'Q3',q4:'Q4'}[t.quad]}</span>
+        <span class="catb cat-${t.cat}">${catLabel[t.cat]||'Khác'}</span>
+        ${toggleBtn}
+        <button class="btn-del" onclick="deleteTodo('${t.id}')">✕</button>
+      </div>
+      ${subsHtml}
+    </div>`;
+  }).join('')||(todoFilter==='done'?'<p style="color:var(--t3);font-size:13px">Chưa hoàn thành việc nào.</p>':'<p style="color:var(--t3);font-size:13px">Chưa có việc cần làm ở đây.</p>');
 }
 function addTodo(){
   const txt = document.getElementById('todo-inp').value.trim();
@@ -2024,7 +2059,18 @@ function addQuickTodo(){
 }
 function toggleTodo(id){const t=D.todos.find(x=>x.id===id);if(t){t.done=!t.done;t.doneAt=t.done?today():'';}save();renderTodos();}
 function updateTodoText(id,value){const t=D.todos.find(x=>x.id===id);if(t)t.text=value;save();}
-function deleteTodo(id){D.todos=D.todos.filter(t=>t.id!==id);save();renderTodos();}
+function deleteTodo(id){expandedTodos.delete(id);D.todos=D.todos.filter(t=>t.id!==id);save();renderTodos();}
+function toggleSubsPanel(id){expandedTodos.has(id)?expandedTodos.delete(id):expandedTodos.add(id);renderTodos();}
+function addSub(id){
+  const t=D.todos.find(x=>x.id===id);if(!t)return;
+  if(!t.subs)t.subs=[];
+  t.subs.push({id:'s'+Date.now(),text:'',done:false});
+  expandedTodos.add(id);save();renderTodos();
+  setTimeout(()=>{const inps=document.querySelectorAll(`[data-tid="${id}"] .sub-inp`)||document.querySelectorAll('.todo-subs .sub-inp');if(inps.length)inps[inps.length-1].focus();},50);
+}
+function toggleSub(tid,si){const t=D.todos.find(x=>x.id===tid);if(t&&t.subs[si]){t.subs[si].done=!t.subs[si].done;save();renderTodos();}}
+function updateSub(tid,si,val){const t=D.todos.find(x=>x.id===tid);if(t&&t.subs[si])t.subs[si].text=val;save();}
+function deleteSub(tid,si){const t=D.todos.find(x=>x.id===tid);if(t){t.subs.splice(si,1);save();renderTodos();}}
 function setTodoFilter(btn){
   document.querySelectorAll('.tf').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on'); todoFilter=btn.dataset.f; renderTodos();
