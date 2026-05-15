@@ -330,6 +330,22 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 .day-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .day-btn{padding:6px 14px;border-radius:var(--r-sm);border:1px solid var(--bd);background:var(--s2);font-size:13px;font-weight:500;cursor:pointer;color:var(--t2);transition:var(--tr);touch-action:manipulation}
 .day-btn.active{background:var(--amber-m);color:#fff;border-color:var(--amber-m)}
+.ctx-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--t2);background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:3px 10px;cursor:pointer;transition:var(--tr)}
+.ctx-chip:hover{border-color:var(--amber-m);color:var(--amber)}
+.mwk-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.mwk-card{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-sm);padding:10px 14px;cursor:pointer;transition:var(--tr)}
+.mwk-card:hover{border-color:var(--amber-m);background:#fff}
+.mwk-card.cur{border-color:var(--amber-m);background:var(--amber-bg)}
+.mwk-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.mwk-label{font-size:12px;font-weight:600;color:var(--t)}
+.mwk-range{font-size:11px;color:var(--t3)}
+.mwk-mits{font-size:12px;color:var(--t2);line-height:1.6}
+.mg-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.mg-row{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid transparent;border-radius:var(--r-sm);padding:7px 10px;transition:var(--tr)}
+.mg-row:focus-within{background:#fff;border-color:var(--amber-m);box-shadow:var(--focus-ring)}
+.mg-check{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--bd2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;background:#fff;transition:var(--tr);touch-action:manipulation}
+.mg-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.mg-inp{flex:1;border:none;background:transparent;font-size:14px;color:var(--t1);outline:none}
 .routine-section{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.6px;padding:10px 0 5px;color:var(--t3)}
 
 /* HABITS */
@@ -542,8 +558,9 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
     <div class="ni" data-p="vision"><div class="nd" style="background:#6366f1"></div>Tầm nhìn</div>
     <div class="ng">Hành động</div>
     <div class="ni" data-p="todo"><div class="nd"></div>Todo</div>
+    <div class="ni" data-p="monthly"><div class="nd" style="background:var(--coral)"></div>Kế hoạch tháng</div>
     <div class="ni" data-p="weekly"><div class="nd"></div>Kế hoạch tuần</div>
-    <div class="ni" data-p="routine"><div class="nd"></div>Ngày lý tưởng</div>
+    <div class="ni" data-p="routine"><div class="nd"></div>Kế hoạch ngày</div>
     <div class="ng">Theo dõi</div>
     <div class="ni" data-p="habits"><div class="nd"></div>Habit Tracker</div>
     <div class="ni" data-p="milestones"><div class="nd"></div>Milestones</div>
@@ -848,12 +865,13 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 <!-- ══ WEEKLY ══ -->
 <div class="page" id="p-weekly">
   <div class="ph"><div class="pe">Hành động</div><div class="pt">Kế hoạch tuần</div><div class="pd">Thiết lập ý định trước tuần mới. Chủ nhật tối hoặc sáng thứ Hai.</div><div class="ftags"><span class="tag tg">Implementation Intentions — Gollwitzer 1999</span><span class="tag ta">Most Important Tasks</span></div></div>
-  <div class="journal-nav" style="margin-bottom:16px">
+  <div class="journal-nav" style="margin-bottom:8px">
     <button class="jnav-btn" onclick="weeklyMove(-1)">← Tuần trước</button>
     <div class="jdate" id="weekly-week-label"></div>
     <button class="jnav-btn" onclick="weeklyMove(1)">Tuần sau →</button>
     <button class="jnav-btn" onclick="weeklyToday()">Tuần này</button>
   </div>
+  <div id="weekly-month-ctx" style="margin-bottom:14px"></div>
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px">
       <div class="ct" style="margin:0"><div class="ca ca-a"></div>Việc quan trọng nhất tuần</div>
@@ -881,12 +899,54 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   </div>
 </div>
 
+<!-- ══ MONTHLY ══ -->
+<div class="page" id="p-monthly">
+  <div class="ph"><div class="pe">Hành động</div><div class="pt">Kế hoạch tháng</div><div class="pd">Chủ đề và mục tiêu lớn của tháng. Nhìn big picture trước khi plan tuần.</div><div class="ftags"><span class="tag ta">Monthly Review</span><span class="tag tt">Big Picture Thinking</span></div></div>
+  <div class="journal-nav" style="margin-bottom:16px">
+    <button class="jnav-btn" onclick="monthlyMove(-1)">← Tháng trước</button>
+    <div class="jdate" id="monthly-label"></div>
+    <button class="jnav-btn" onclick="monthlyMove(1)">Tháng sau →</button>
+    <button class="jnav-btn" onclick="monthlyToday()">Tháng này</button>
+  </div>
+  <div class="card">
+    <div class="ct"><div class="ca ca-c"></div>Theme tháng</div>
+    <div class="f"><label>Focus tháng này là gì?</label><input type="text" id="m-theme" placeholder="VD: Xây nền tảng sức khoẻ, Launch MVP..." oninput="getMonthly().theme=this.value;save()"></div>
+    <div class="f" style="margin-top:4px"><label>Mục tiêu lớn tháng (tối đa 5)</label>
+      <div class="mg-list" id="monthly-goals-list"></div>
+      <button class="btn btn-a" style="font-size:12px;margin-top:8px" onclick="addMonthGoal()">+ Thêm mục tiêu</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct"><div class="ca ca-p"></div>Ghi chú tháng</div>
+    <textarea id="m-note" placeholder="Context đặc biệt, cảm nhận, quyết định..." oninput="getMonthly().note=this.value;save()"></textarea>
+  </div>
+  <div class="card">
+    <div class="ct"><div class="ca ca-t"></div>Các tuần trong tháng</div>
+    <div class="mwk-list" id="monthly-weeks"></div>
+  </div>
+</div>
+
 <!-- ══ ROUTINE ══ -->
 <div class="page" id="p-routine">
-  <div class="ph"><div class="pe">Hành động</div><div class="pt">Ngày lý tưởng</div><div class="pd">Template ngày mặc định. Thêm / xoá các time block tuỳ ý.</div><div class="ftags"><span class="tag ta">Time Blocking — Cal Newport</span><span class="tag tt">Ultradian Rhythms</span></div></div>
+  <div class="ph"><div class="pe">Hành động</div><div class="pt">Kế hoạch ngày</div><div class="pd">Plan ngày cụ thể (lưu theo ngày) + Template T2-CN làm base.</div><div class="ftags"><span class="tag ta">Time Blocking — Cal Newport</span><span class="tag tt">Ultradian Rhythms</span></div></div>
+  <div class="card">
+    <div class="ct" style="margin-bottom:12px"><div class="ca ca-a"></div>Plan ngày cụ thể</div>
+    <div class="journal-nav" style="margin-bottom:10px">
+      <button class="jnav-btn" onclick="dayMove(-1)">← Hôm qua</button>
+      <div class="jdate" id="day-nav-label"></div>
+      <button class="jnav-btn" onclick="dayMove(1)">Ngày mai →</button>
+      <button class="jnav-btn" onclick="dayToday()">Hôm nay</button>
+    </div>
+    <div id="day-week-ctx" style="margin-bottom:10px"></div>
+    <div class="routine-list" id="day-blocks-list"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn btn-a" style="font-size:12px" onclick="addDayBlock()">+ Thêm block</button>
+      <button class="btn btn-ghost" style="font-size:12px" onclick="applyDayTemplate()">Dùng template T2-CN</button>
+    </div>
+  </div>
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div class="ct" style="margin:0"><div class="ca ca-a"></div>Time blocks</div>
+      <div class="ct" style="margin:0"><div class="ca ca-a"></div>Template T2-CN (Ngày lý tưởng)</div>
       <button class="btn btn-a" style="font-size:12px" onclick="addBlock()">+ Thêm block</button>
     </div>
     <div class="day-selector" id="routine-day-selector"></div>
@@ -1237,6 +1297,8 @@ function normalizeData(){
     if(!D.routines['Mon']) D.routines['Mon'] = D.routine;
     delete D.routine;
   }
+  D.monthlys = D.monthlys||{};
+  D.days = D.days||{};
 }
 
 function normalizeKR(kr){
@@ -1274,8 +1336,9 @@ function nav(p){
   if(p==='things') renderThings();
   if(p==='personal') renderPersonal();
   if(p==='eco') renderObjectives('eco');
+  if(p==='monthly') renderMonthly();
   if(p==='weekly'){renderWeekly();renderEnergyBlocks();}
-  if(p==='routine') renderRoutine();
+  if(p==='routine'){renderDayBlocks();renderDaySelector();renderRoutine();}
   if(p==='vision') renderVision();
   if(p==='todo') renderTodos();
   setTimeout(initAutoResize, 50);
@@ -1577,6 +1640,14 @@ function updateEnergyBlock(id,key,val){const b=getWeekly().energy.find(x=>x.id==
 function renderWeekly(){
   const lbl=document.getElementById('weekly-week-label');
   if(lbl) lbl.textContent=fmtWeekLabel(weeklyWeek);
+  // month breadcrumb
+  const mctx=document.getElementById('weekly-month-ctx');
+  if(mctx){
+    const ws=weekStartDate(weeklyWeek);ws.setUTCDate(ws.getUTCDate()+3);
+    const mk=monthKey(new Date(ws.getUTCFullYear(),ws.getUTCMonth(),ws.getUTCDate()));
+    const[my,mm]=mk.split('-').map(Number);
+    mctx.innerHTML=`<button class="ctx-chip" onclick="monthlyMonth='${mk}';nav('monthly')">↑ Tháng ${mm}/${my}</button>`;
+  }
   const w=getWeekly();
   const noteEl=document.getElementById('w-note');
   if(noteEl){noteEl.value=w.note||'';autoResize(noteEl);}
@@ -1900,6 +1971,114 @@ function weeklyToday(){weeklyWeek=weekKey(new Date());renderWeekly();renderEnerg
 function weeklyMove(dir){
   const d=weekStartDate(weeklyWeek);d.setUTCDate(d.getUTCDate()+dir*7);
   weeklyWeek=weekKey(d);renderWeekly();renderEnergyBlocks();
+}
+// ── MONTHLY PLAN ──
+function monthKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function weeksInMonth(mk){
+  const [y,m]=mk.split('-').map(Number);
+  const weeks=[],d=new Date(Date.UTC(y,m-1,1));
+  while(d.getUTCMonth()===m-1){const wk=weekKey(d);if(!weeks.includes(wk))weeks.push(wk);d.setUTCDate(d.getUTCDate()+1);}
+  return weeks;
+}
+let monthlyMonth = monthKey(new Date());
+function getMonthly(){
+  if(!D.monthlys[monthlyMonth]) D.monthlys[monthlyMonth]={theme:'',goals:[],note:''};
+  return D.monthlys[monthlyMonth];
+}
+function monthlyToday(){monthlyMonth=monthKey(new Date());renderMonthly();}
+function monthlyMove(dir){
+  const [y,m]=monthlyMonth.split('-').map(Number);
+  monthlyMonth=monthKey(new Date(y,m-1+dir,1));renderMonthly();
+}
+function renderMonthly(){
+  const lbl=document.getElementById('monthly-label');
+  if(lbl){const[y,m]=monthlyMonth.split('-').map(Number);lbl.textContent=`Tháng ${m}/${y}`;}
+  const mo=getMonthly();
+  const themeEl=document.getElementById('m-theme');if(themeEl)themeEl.value=mo.theme||'';
+  const noteEl=document.getElementById('m-note');if(noteEl){noteEl.value=mo.note||'';autoResize(noteEl);}
+  const gl=document.getElementById('monthly-goals-list');
+  if(gl){
+    gl.innerHTML=(mo.goals||[]).map((g,i)=>`
+      <div class="mg-row">
+        <div class="mg-check ${g.done?'checked':''}" onclick="toggleMonthGoal(${i})">${g.done?'✓':''}</div>
+        <input class="mg-inp" value="${escapeAttr(g.text)}" oninput="updateMonthGoal(${i},this.value)" placeholder="Mục tiêu tháng...">
+        <button class="btn-del" onclick="deleteMonthGoal(${i})">✕</button>
+      </div>`).join('')||'<div style="font-size:13px;color:var(--t3);padding:4px 0">Chưa có mục tiêu. Thêm 1-3 mục tiêu lớn.</div>';
+  }
+  const ww=document.getElementById('monthly-weeks');
+  if(ww){
+    const curWk=weekKey(new Date());
+    ww.innerHTML=weeksInMonth(monthlyMonth).map(wk=>{
+      const ws=weekStartDate(wk),we=new Date(ws);we.setUTCDate(ws.getUTCDate()+6);
+      const fmt=d=>d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',timeZone:'UTC'});
+      const wd=D.weeklys&&D.weeklys[wk];
+      const mits=(wd&&wd.mits||[]).filter(Boolean).slice(0,2);
+      const isCur=wk===curWk;
+      return `<div class="mwk-card${isCur?' cur':''}" onclick="navToWeek('${wk}')">
+        <div class="mwk-top">
+          <span class="mwk-label">${wk}${isCur?' · Tuần này':''}</span>
+          <span class="mwk-range">${fmt(ws)} – ${fmt(we)}</span>
+        </div>
+        <div class="mwk-mits">${mits.length?mits.map((m,i)=>`<span style="color:var(--t3);margin-right:4px">M${i+1}</span>${escapeHtml(m)}`).join('<br>'):'<span style="color:var(--t3);font-size:11px">Chưa có MIT</span>'}</div>
+      </div>`;
+    }).join('');
+  }
+}
+function navToWeek(wk){weeklyWeek=wk;nav('weekly');}
+function addMonthGoal(){getMonthly().goals.push({text:'',done:false});save();renderMonthly();}
+function deleteMonthGoal(i){getMonthly().goals.splice(i,1);save();renderMonthly();}
+function toggleMonthGoal(i){const g=getMonthly().goals[i];if(g)g.done=!g.done;save();renderMonthly();}
+function updateMonthGoal(i,v){const g=getMonthly().goals[i];if(g)g.text=v;save();}
+// ── DAILY PLAN (per-date) ──
+let dayDate = dateStr(new Date());
+function dayToday(){dayDate=dateStr(new Date());renderDayBlocks();}
+function dayMove(dir){const d=new Date(dayDate+'T00:00:00');d.setDate(d.getDate()+dir);dayDate=dateStr(d);renderDayBlocks();}
+function renderDayBlocks(){
+  const dl=document.getElementById('day-nav-label');
+  if(dl){
+    const d=new Date(dayDate+'T00:00:00');
+    const days=['CN','T2','T3','T4','T5','T6','T7'];
+    dl.textContent=`${days[d.getDay()]} ${d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'})}`;
+  }
+  const wctx=document.getElementById('day-week-ctx');
+  if(wctx){
+    const d=new Date(dayDate+'T00:00:00');const wk=weekKey(d);
+    wctx.innerHTML=`<button class="ctx-chip" onclick="weeklyWeek='${wk}';nav('weekly')">↑ ${wk}</button>`;
+  }
+  const data=D.days[dayDate];
+  const el=document.getElementById('day-blocks-list');if(!el)return;
+  if(!data||!data.length){
+    el.innerHTML='<div style="font-size:13px;color:var(--t3);padding:10px 0">Chưa có plan. Bấm "Dùng template T2-CN" hoặc thêm block thủ công.</div>';
+    return;
+  }
+  el.innerHTML=data.map(b=>{
+    const t=b.type||'deep';const opts=BLOCK_TYPE_OPTS.replace(`value="${t}"`,`value="${t}" selected`);
+    return `<div class="routine-row" style="border-left:4px solid var(--accent-${t})">
+      <input class="routine-time" type="text" value="${escapeAttr(b.time)}" oninput="updateDayBlock('${b.id}','time',this.value)" placeholder="6:00">
+      <select class="routine-type" onchange="updateDayBlock('${b.id}','type',this.value);renderDayBlocks()">${opts}</select>
+      <input class="routine-label" type="text" value="${escapeAttr(b.label)}" oninput="updateDayBlock('${b.id}','label',this.value)" placeholder="Mô tả hoạt động...">
+      <button class="routine-del" onclick="deleteDayBlock('${b.id}')">✕</button>
+    </div>`;
+  }).join('');
+}
+function applyDayTemplate(){
+  const d=new Date(dayDate+'T00:00:00');
+  const dk=ROUTINE_DAY_FROM_DOW[d.getDay()];
+  const tmpl=D.routines[dk]||[];
+  D.days[dayDate]=tmpl.map(b=>({...b,id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2)}));
+  save();renderDayBlocks();
+}
+function addDayBlock(){
+  if(!D.days[dayDate])D.days[dayDate]=[];
+  D.days[dayDate].push({id:'d'+Date.now(),time:'',label:'',type:'deep'});
+  save();renderDayBlocks();
+}
+function deleteDayBlock(id){
+  if(D.days[dayDate])D.days[dayDate]=D.days[dayDate].filter(b=>b.id!==id);
+  save();renderDayBlocks();
+}
+function updateDayBlock(id,key,val){
+  if(!D.days[dayDate])return;const b=D.days[dayDate].find(x=>x.id===id);if(b)b[key]=val;save();
 }
 // ── ROUTINE (per-day) ──
 const ROUTINE_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -2257,7 +2436,8 @@ renderObjectives('eco');
 renderWeekly();renderEnergyBlocks();
 renderHabits();
 renderMilestones();
-renderDaySelector();renderRoutine();
+renderDaySelector();renderRoutine();renderDayBlocks();
+renderMonthly();
 renderVision();
 renderTodos();
 renderJournal();
