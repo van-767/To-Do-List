@@ -330,6 +330,23 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 .day-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .day-btn{padding:6px 14px;border-radius:var(--r-sm);border:1px solid var(--bd);background:var(--s2);font-size:13px;font-weight:500;cursor:pointer;color:var(--t2);transition:var(--tr);touch-action:manipulation}
 .day-btn.active{background:var(--amber-m);color:#fff;border-color:var(--amber-m)}
+/* PRODUCTIVITY */
+.prod-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:520px){.prod-stat-grid{grid-template-columns:repeat(2,1fr)}}
+.prod-stat{background:var(--s2);border-radius:var(--r-sm);border:1px solid var(--bd);padding:10px 12px;text-align:center}
+.prod-stat-val{font-size:20px;font-weight:700;color:var(--t);line-height:1.2}
+.prod-stat-lbl{font-size:11px;color:var(--t3);margin-top:2px}
+.hbar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.hbar-name{font-size:13px;color:var(--t2);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar-track{flex:1;height:6px;background:var(--bd);border-radius:3px;overflow:hidden}
+.hbar-fill{height:100%;background:var(--green);border-radius:3px;transition:width .4s}
+.hbar-cnt{font-size:11px;color:var(--t3);min-width:32px;text-align:right}
+.pwk-row{display:flex;align-items:center;gap:10px;padding:5px 0;cursor:pointer;border-radius:6px;transition:var(--tr)}
+.pwk-row:hover .pwk-name{color:var(--amber-m)}
+.pwk-name{font-size:12px;font-weight:600;color:var(--t2);min-width:80px}
+.pwk-track{flex:1;height:8px;background:var(--bd);border-radius:4px;overflow:hidden}
+.pwk-fill{height:100%;background:var(--green);border-radius:4px;transition:width .4s}
+.pwk-pct{font-size:11px;color:var(--t3);min-width:36px;text-align:right}
 .ctx-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--t2);background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:3px 10px;cursor:pointer;transition:var(--tr)}
 .ctx-chip:hover{border-color:var(--amber-m);color:var(--amber)}
 .mwk-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
@@ -557,16 +574,17 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
     <div class="ni" data-p="personal"><div class="nd" style="background:var(--purple)"></div>Personal Dev</div>
     <div class="ni" data-p="vision"><div class="nd" style="background:#6366f1"></div>Tầm nhìn</div>
     <div class="ng">Hành động</div>
-    <div class="ni" data-p="todo"><div class="nd"></div>Todo</div>
+    <div class="ni" data-p="todo"><div class="nd" style="background:#3B82F6"></div>Todo</div>
     <div class="ni" data-p="monthly"><div class="nd" style="background:var(--coral)"></div>Kế hoạch tháng</div>
-    <div class="ni" data-p="weekly"><div class="nd"></div>Kế hoạch tuần</div>
-    <div class="ni" data-p="routine"><div class="nd"></div>Kế hoạch ngày</div>
+    <div class="ni" data-p="weekly"><div class="nd" style="background:var(--teal)"></div>Kế hoạch tuần</div>
+    <div class="ni" data-p="routine"><div class="nd" style="background:var(--amber-m)"></div>Kế hoạch ngày</div>
     <div class="ng">Theo dõi</div>
-    <div class="ni" data-p="habits"><div class="nd"></div>Habit Tracker</div>
-    <div class="ni" data-p="milestones"><div class="nd"></div>Milestones</div>
+    <div class="ni" data-p="habits"><div class="nd" style="background:var(--green)"></div>Habit Tracker</div>
+    <div class="ni" data-p="milestones"><div class="nd" style="background:#EAB308"></div>Milestones</div>
     <div class="ng">Nhìn lại</div>
-    <div class="ni" data-p="journal"><div class="nd"></div>Nhật ký</div>
-    <div class="ni" data-p="retro"><div class="nd"></div>Retrospective</div>
+    <div class="ni" data-p="journal"><div class="nd" style="background:var(--purple)"></div>Nhật ký</div>
+    <div class="ni" data-p="retro"><div class="nd" style="background:#EC4899"></div>Retrospective</div>
+    <div class="ni" data-p="productivity"><div class="nd" style="background:#10B981"></div>Năng suất</div>
   </nav>
   <div class="sb-foot">
     <div class="sb-btns">
@@ -957,6 +975,35 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   </div>
 </div>
 
+<!-- ══ PRODUCTIVITY ══ -->
+<div class="page" id="p-productivity">
+  <div class="ph"><div class="pe">Nhìn lại</div><div class="pt">Năng suất</div><div class="pd">Thành tích tuần và tháng: habits, MITs, journal, mood.</div><div class="ftags"><span class="tag tg">Weekly Review</span><span class="tag tp">Monthly Stats</span></div></div>
+  <div class="journal-nav" style="margin-bottom:12px">
+    <button class="jnav-btn" onclick="prodWeekMove(-1)">← Tuần trước</button>
+    <div class="jdate" id="prod-week-label"></div>
+    <button class="jnav-btn" onclick="prodWeekMove(1)">Tuần sau →</button>
+    <button class="jnav-btn" onclick="prodWeek=weekKey(new Date());renderProductivity()">Tuần này</button>
+  </div>
+  <div class="card">
+    <div class="ct"><div class="ca" style="background:#10B981"></div>Thống kê tuần</div>
+    <div class="prod-stat-grid" id="prod-week-stats"></div>
+    <div id="prod-habit-bars"></div>
+    <div id="prod-week-mits"></div>
+  </div>
+  <div class="journal-nav" style="margin-bottom:12px;margin-top:4px">
+    <button class="jnav-btn" onclick="prodMonthMove(-1)">← Tháng trước</button>
+    <div class="jdate" id="prod-month-label"></div>
+    <button class="jnav-btn" onclick="prodMonthMove(1)">Tháng sau →</button>
+    <button class="jnav-btn" onclick="prodMonth=monthKey(new Date());renderProductivity()">Tháng này</button>
+  </div>
+  <div class="card">
+    <div class="ct"><div class="ca" style="background:#10B981"></div>Thống kê tháng</div>
+    <div class="prod-stat-grid" id="prod-month-stats"></div>
+    <div id="prod-month-weeks"></div>
+    <div id="prod-month-goals"></div>
+  </div>
+</div>
+
 <!-- ══ HABITS ══ -->
 <div class="page" id="p-habits">
   <div class="ph"><div class="pe">Theo dõi</div><div class="pt">Habit Tracker</div><div class="pd">Theo dõi streak và lịch sử 28 ngày. Đừng phá chuỗi.</div><div class="ftags"><span class="tag tg">Habit Loop — Clear 2018</span><span class="tag ta">Don't Break The Chain</span></div></div>
@@ -1336,6 +1383,7 @@ function nav(p){
   if(p==='personal') renderPersonal();
   if(p==='eco') renderObjectives('eco');
   if(p==='monthly') renderMonthly();
+  if(p==='productivity') renderProductivity();
   if(p==='weekly'){renderWeekly();renderEnergyBlocks();}
   if(p==='routine'){renderDayBlocks();renderDaySelector();renderRoutine();}
   if(p==='vision') renderVision();
@@ -1951,6 +1999,94 @@ function weekStartDate(wkStr){
   weekStart.setUTCDate(jan4.getUTCDate()-dow+1+(w-1)*7);
   return weekStart;
 }
+// ── PRODUCTIVITY ──
+let prodWeek = weekKey(new Date());
+let prodMonth = monthKey(new Date());
+function prodWeekMove(dir){const d=weekStartDate(prodWeek);d.setUTCDate(d.getUTCDate()+dir*7);prodWeek=weekKey(d);renderProductivity();}
+function prodMonthMove(dir){const[y,m]=prodMonth.split('-').map(Number);prodMonth=monthKey(new Date(y,m-1+dir,1));renderProductivity();}
+function renderProductivity(){
+  // week label
+  const wlbl=document.getElementById('prod-week-label');
+  if(wlbl) wlbl.textContent=fmtWeekLabel(prodWeek);
+  // month label
+  const mlbl=document.getElementById('prod-month-label');
+  if(mlbl){const[y,m]=prodMonth.split('-').map(Number);mlbl.textContent=`Tháng ${m}/${y}`;}
+  // week dates
+  const ws=weekStartDate(prodWeek);
+  const wdates=Array.from({length:7},(_,i)=>{const d=new Date(ws);d.setUTCDate(ws.getUTCDate()+i);return dateStr(d);});
+  // habit stats for week
+  const hstats=(D.habits||[]).map(h=>{
+    const done=wdates.filter(d=>h.completions&&h.completions[d]).length;
+    const target=habitTarget(h);
+    return {name:h.name,done,target,pct:Math.min(100,Math.round(done/target*100))};
+  });
+  const avgHabit=hstats.length?Math.round(hstats.reduce((s,h)=>s+h.pct,0)/hstats.length):0;
+  // journal stats for week
+  const jCount=wdates.filter(d=>D.journals&&D.journals[d]&&(D.journals[d].intention||D.journals[d].highlight)).length;
+  const moods=wdates.filter(d=>D.journals&&D.journals[d]&&D.journals[d].mood).map(d=>parseInt(D.journals[d].mood)||0);
+  const avgMood=moods.length?(moods.reduce((s,m)=>s+m,0)/moods.length).toFixed(1):'--';
+  // MITs for week
+  const wdata=D.weeklys&&D.weeklys[prodWeek];
+  const mits=wdata?(wdata.mits||[]).filter(Boolean):[];
+  // render week stats
+  const wstats=document.getElementById('prod-week-stats');
+  if(wstats) wstats.innerHTML=`
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--green)">${avgHabit}%</div><div class="prod-stat-lbl">Habit score</div></div>
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--amber)">${mits.length}</div><div class="prod-stat-lbl">MITs đặt ra</div></div>
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--teal)">${jCount}/7</div><div class="prod-stat-lbl">Ngày journal</div></div>
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--purple)">${avgMood}</div><div class="prod-stat-lbl">Mood TB</div></div>`;
+  // render habit bars
+  const hbars=document.getElementById('prod-habit-bars');
+  if(hbars) hbars.innerHTML=hstats.map(h=>`
+    <div class="hbar-row">
+      <div class="hbar-name">${escapeHtml(h.name||'Habit')}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${h.pct}%"></div></div>
+      <div class="hbar-cnt">${h.done}/${h.target}</div>
+    </div>`).join('')||'<div style="font-size:13px;color:var(--t3)">Chưa có habit nào.</div>';
+  // render week MITs
+  const mitEl=document.getElementById('prod-week-mits');
+  if(mitEl) mitEl.innerHTML=mits.length?`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"><div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:6px">MITs tuần này</div>${mits.map((m,i)=>`<div style="font-size:13px;color:var(--t2);padding:3px 0"><span style="color:var(--t3);margin-right:6px">M${i+1}</span>${escapeHtml(m)}</div>`).join('')}</div>`:'';
+  // MONTH section
+  const monthWeeks=weeksInMonth(prodMonth);
+  const curWk=weekKey(new Date());
+  const[my,mm]=prodMonth.split('-').map(Number);
+  const daysInMonth=new Date(my,mm,0).getDate();
+  const mDates=Array.from({length:daysInMonth},(_,i)=>{const d=new Date(my,mm-1,i+1);return dateStr(d);});
+  const mJCount=mDates.filter(d=>D.journals&&D.journals[d]&&(D.journals[d].intention||D.journals[d].highlight)).length;
+  const mo=D.monthlys&&D.monthlys[prodMonth];
+  const mgoalsList=mo?(mo.goals||[]):[];
+  const mgoalsDone=mgoalsList.filter(g=>g.done).length;
+  // per-week habit avg for month
+  const wkAvgs=monthWeeks.map(wk=>{
+    const wsd=weekStartDate(wk);
+    const wd=Array.from({length:7},(_,i)=>{const d=new Date(wsd);d.setUTCDate(wsd.getUTCDate()+i);return dateStr(d);});
+    if(!(D.habits||[]).length) return 0;
+    const pcts=(D.habits||[]).map(h=>{const done=wd.filter(d=>h.completions&&h.completions[d]).length;const t=habitTarget(h);return Math.min(100,Math.round(done/t*100));});
+    return Math.round(pcts.reduce((s,p)=>s+p,0)/pcts.length);
+  });
+  const overallM=wkAvgs.length?Math.round(wkAvgs.reduce((s,p)=>s+p,0)/wkAvgs.length):0;
+  // month stats
+  const mstats=document.getElementById('prod-month-stats');
+  if(mstats) mstats.innerHTML=`
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--green)">${overallM}%</div><div class="prod-stat-lbl">Habit TB tháng</div></div>
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--amber)">${mgoalsDone}/${mgoalsList.length||'—'}</div><div class="prod-stat-lbl">Goals đạt</div></div>
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--teal)">${mJCount}/${daysInMonth}</div><div class="prod-stat-lbl">Ngày journal</div></div>
+    <div class="prod-stat"><div class="prod-stat-val" style="color:var(--coral)">${monthWeeks.length}</div><div class="prod-stat-lbl">Tuần</div></div>`;
+  // month week bars
+  const mwbars=document.getElementById('prod-month-weeks');
+  if(mwbars) mwbars.innerHTML=monthWeeks.map((wk,i)=>{
+    const pct=wkAvgs[i]||0;const isCur=wk===curWk;
+    const wn=wk.split('-W')[1];
+    return `<div class="pwk-row" onclick="prodWeek='${wk}';renderProductivity()">
+      <div class="pwk-name" style="${isCur?'color:var(--amber-m);font-weight:700':''}">Tuần ${wn}${isCur?' ★':''}</div>
+      <div class="pwk-track"><div class="pwk-fill" style="width:${pct}%"></div></div>
+      <div class="pwk-pct">${pct}%</div>
+    </div>`;
+  }).join('');
+  // month goals
+  const mgoalsEl=document.getElementById('prod-month-goals');
+  if(mgoalsEl) mgoalsEl.innerHTML=mgoalsList.length?`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"><div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:6px">Mục tiêu tháng</div>${mgoalsList.map(g=>`<div style="font-size:13px;padding:3px 0;color:${g.done?'var(--t3)':'var(--t2)'}"><span style="margin-right:8px">${g.done?'✓':'○'}</span>${escapeHtml(g.text||'')}</div>`).join('')}</div>`:'';
+}
 let retroWeek = weekKey(new Date());
 // ── WEEKLY PLAN (per-week) ──
 let weeklyWeek = weekKey(new Date());
@@ -2443,6 +2579,7 @@ renderHabits();
 renderMilestones();
 renderDaySelector();renderRoutine();renderDayBlocks();
 renderMonthly();
+renderProductivity();
 renderVision();
 renderTodos();
 renderJournal();
