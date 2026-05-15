@@ -1,3 +1,30 @@
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
+
+firebase.initializeApp({
+  apiKey: "AIzaSyCIsK36ijlcZnPMRLleRP_gibZGkuCagDc",
+  authDomain: "todo-list-4ab52.firebaseapp.com",
+  projectId: "todo-list-4ab52",
+  storageBucket: "todo-list-4ab52.firebasestorage.app",
+  messagingSenderId: "1017204948498",
+  appId: "1:1017204948498:web:1b3d7069afbc7724de22cb"
+});
+
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage(payload => {
+  const title = (payload.notification && payload.notification.title) || (payload.data && payload.data.title) || 'MyGoals';
+  const body = (payload.notification && payload.notification.body) || (payload.data && payload.data.body) || '';
+  return self.registration.showNotification(title, {
+    body,
+    icon: '/To-Do-List/icons/mygoals-icon.svg',
+    badge: '/To-Do-List/icons/mygoals-icon.svg',
+    vibrate: [200, 100, 200],
+    tag: 'mygoals',
+    renotify: true
+  });
+});
+
 const CACHE_NAME = 'mygoals-v4';
 const APP_SHELL = [
   './index.html',

@@ -1350,7 +1350,8 @@ let D = {
   retros:{},
   nonneg:'',
   todos:[],
-  notif:{block_notif:false,reasons_min:0}
+  notif:{block_notif:false,reasons_min:0},
+  fcmToken:''
 };
 
 let todoFilter = 'all';
@@ -1452,6 +1453,7 @@ function normalizeData(){
   D.habits = (D.habits||[]).map(h=>Object.assign({target:7,completions:{}}, h));
   D.todos = (D.todos||[]).map(t=>Object.assign({created:today(),done:false,subs:[]}, t));
   D.notif = Object.assign({block_notif:false,reasons_min:0}, D.notif||{});
+  D.fcmToken = D.fcmToken||'';
   D.todos.forEach(t=>{if(!Array.isArray(t.subs))t.subs=[];});
   D.things = D.things||[];
   D.journals = D.journals||{};
@@ -2110,6 +2112,8 @@ function deleteSub(tid,si){const t=D.todos.find(x=>x.id===tid);if(t){t.subs.spli
 // ── NOTIFICATIONS ──
 const _notifiedBlocks = new Set();
 let _blockTick, _reasonsTick;
+const VAPID_KEY = 'BOpaPnsaC77ldal_PExQ_W5ie5zdd4sheDQkCZ_h5byieOCZNtZWyoQrCSMEwdzUXuDd6vFYddlnzkkycuzOJu0';
+const WORKER_URL = ''; // filled after Cloudflare Worker is deployed
 
 function notifPerm(){return('Notification' in window)?Notification.permission:'denied';}
 
@@ -2131,14 +2135,62 @@ function renderNotifStatus(){
   if(sel) sel.value = String(D.notif.reasons_min||0);
 }
 
+async function initFCM(){
+  try {
+    if(typeof firebase === 'undefined') return;
+    firebase.initializeApp({
+      apiKey:"AIzaSyCIsK36ijlcZnPMRLleRP_gibZGkuCagDc",
+      authDomain:"todo-list-4ab52.firebaseapp.com",
+      projectId:"todo-list-4ab52",
+      storageBucket:"todo-list-4ab52.firebasestorage.app",
+      messagingSenderId:"1017204948498",
+      appId:"1:1017204948498:web:1b3d7069afbc7724de22cb"
+    });
+  } catch(e){} // already initialized is fine
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const token = await firebase.messaging().getToken({
+      vapidKey: VAPID_KEY,
+      serviceWorkerRegistration: reg
+    });
+    if(token){
+      D.fcmToken = token;
+      save();
+      syncSchedule();
+    }
+  } catch(e){ console.warn('FCM token error:', e); }
+}
+
+async function syncSchedule(){
+  if(!D.fcmToken || !WORKER_URL) return;
+  const todayKey = dateStr(new Date());
+  const schedule = (D.days[todayKey]||[]).map(b=>({time:b.time,type:b.type,label:b.label}));
+  const reasons = (D.per.reasons||[]).filter(r=>r.text).map(r=>r.text);
+  try {
+    await fetch(WORKER_URL+'/register',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        fcmToken:D.fcmToken,
+        date:todayKey,
+        schedule,
+        reasons,
+        reasonsIntervalMin:D.notif.reasons_min||0
+      })
+    });
+  } catch(e){}
+}
+
 async function toggleBlockNotif(){
-  if(notifPerm()==='denied'){alert('Thông báo đang bị chặn. Vào cài đặt trình duyệt để cho phép.');return;}
+  if(notifPerm()==='denied'){alert('Thông báo đang bị chặn. Vào Settings → Site Settings → Notifications → cho phép van-767.github.io');return;}
   if(notifPerm()==='default'){
     const r = await Notification.requestPermission();
     if(r!=='granted'){renderNotifStatus();return;}
   }
   D.notif.block_notif = !D.notif.block_notif;
-  save(); renderNotifStatus(); startBlockScheduler();
+  save(); renderNotifStatus();
+  if(D.notif.block_notif){ await initFCM(); startBlockScheduler(); }
+  else clearInterval(_blockTick);
 }
 
 function startBlockScheduler(){
@@ -2174,6 +2226,7 @@ async function setReasonsInterval(val){
   }
   D.notif.reasons_min=parseInt(val)||0;
   save(); renderNotifStatus(); startReasonsReminder();
+  if(D.fcmToken) syncSchedule();
 }
 
 function startReasonsReminder(){
@@ -2188,9 +2241,11 @@ function startReasonsReminder(){
   }, min*60*1000);
 }
 
-function initNotif(){
+async function initNotif(){
+  if(!('serviceWorker' in navigator)||!('Notification' in window)) return;
   renderNotifStatus();
   if(notifPerm()==='granted'){
+    await initFCM();
     startBlockScheduler();
     startReasonsReminder();
   }
@@ -2958,5 +3013,7 @@ setInterval(()=>{
   }
 }, 60000);
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
 </body>
 </html>
