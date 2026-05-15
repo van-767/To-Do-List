@@ -573,6 +573,7 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
     <div class="ni" data-p="things"><div class="nd" style="background:var(--teal)"></div>Things</div>
     <div class="ni" data-p="personal"><div class="nd" style="background:var(--purple)"></div>Personal Dev</div>
     <div class="ni" data-p="vision"><div class="nd" style="background:#6366f1"></div>Tầm nhìn</div>
+    <div class="ni" data-p="principles"><div class="nd" style="background:#F43F5E"></div>Principles</div>
     <div class="ng">Hành động</div>
     <div class="ni" data-p="todo"><div class="nd" style="background:#3B82F6"></div>Todo</div>
     <div class="ni" data-p="monthly"><div class="nd" style="background:var(--coral)"></div>Kế hoạch tháng</div>
@@ -835,23 +836,6 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
       <div class="f"><div class="wl">O</div><div class="wn">Outcome — Kết quả tốt nhất</div><textarea id="per-wo" placeholder=""></textarea></div>
       <div class="f"><div class="wl">O</div><div class="wn">Obstacle — Rào cản</div><textarea id="per-ob" placeholder=""></textarea></div>
       <div class="f"><div class="wl">P</div><div class="wn">Plan — If / Then</div><textarea id="per-pl" placeholder=""></textarea></div>
-    </div>
-  </div>
-  <div class="card" style="border-left:3px solid var(--purple)">
-    <div class="ct"><div class="ca ca-p"></div>Lý do &amp; Nguyên tắc</div>
-    <div class="f" style="margin-bottom:0">
-      <label style="color:var(--purple);font-size:10px;letter-spacing:.8px">❤️ Reasons — Tại sao tôi làm tất cả điều này?</label>
-      <textarea id="per-reasons" placeholder="Viết lý do sâu xa nhất... Nhìn lại đây khi mệt mỏi, khi muốn bỏ cuộc, khi quên đi mình đang đi đâu." style="min-height:100px;border-color:var(--purple);border-width:1.5px;font-size:14px;line-height:1.65"></textarea>
-    </div>
-    <div class="g2" style="gap:12px;margin-top:14px">
-      <div class="f" style="margin:0">
-        <label style="color:var(--green)">✅ Should do</label>
-        <textarea id="per-should-do" placeholder="Những việc tôi cam kết làm — thói quen, hành động, cách ứng xử..." style="min-height:80px"></textarea>
-      </div>
-      <div class="f" style="margin:0">
-        <label style="color:var(--coral)">🚫 Should not do</label>
-        <textarea id="per-should-not" placeholder="Những thứ tôi cần tránh — distraction, thói xấu, hành vi phá hoại..." style="min-height:80px"></textarea>
-      </div>
     </div>
   </div>
   <div class="card">
@@ -1165,6 +1149,28 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   </div>
 </div>
 
+<!-- ══ PRINCIPLES ══ -->
+<div class="page" id="p-principles">
+  <div class="ph"><div class="pe">Nền tảng</div><div class="pt">Principles</div><div class="pd">Lý do sâu xa, cam kết với bản thân, và những thứ cần tránh — đọc lại khi mệt mỏi hoặc mất phương hướng.</div></div>
+  <div class="card" style="border-left:3px solid #F43F5E">
+    <div class="ct" style="margin-bottom:14px"><span style="font-size:18px;margin-right:8px">❤️</span><span>Reasons — Tại sao tôi làm tất cả điều này?</span></div>
+    <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Đây là lý do sâu xa nhất. Nhìn lại khi mệt mỏi, khi muốn bỏ cuộc, khi quên đi mình đang đi đâu.</p>
+    <textarea id="per-reasons" placeholder="Viết ra lý do thực sự của mình... Tại sao tôi cố gắng mỗi ngày? Điều gì quan trọng nhất với tôi? Tôi đang xây dựng cuộc sống như thế nào?" style="min-height:140px;font-size:14px;line-height:1.7;border-color:#F43F5E;border-width:1.5px"></textarea>
+  </div>
+  <div class="g2" style="gap:14px">
+    <div class="card" style="margin:0;border-left:3px solid var(--green)">
+      <div class="ct" style="margin-bottom:10px"><span style="font-size:16px;margin-right:8px">✅</span><span>Should do</span></div>
+      <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Những việc tôi cam kết làm — thói quen, hành động, cách sống.</p>
+      <textarea id="per-should-do" placeholder="- Tập thể dục mỗi ngày&#10;- Đọc sách 30 phút&#10;- Viết journal buổi tối&#10;..." style="min-height:160px"></textarea>
+    </div>
+    <div class="card" style="margin:0;border-left:3px solid var(--coral)">
+      <div class="ct" style="margin-bottom:10px"><span style="font-size:16px;margin-right:8px">🚫</span><span>Should not do</span></div>
+      <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Những thứ tôi cần tránh — distraction, thói xấu, hành vi phá hoại.</p>
+      <textarea id="per-should-not" placeholder="- Lướt mạng xã hội vô mục đích&#10;- Trì hoãn việc quan trọng&#10;- So sánh bản thân với người khác&#10;..." style="min-height:160px"></textarea>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!-- TEMPLATE MODAL -->
@@ -1406,6 +1412,7 @@ function nav(p){
   if(p==='weekly'){renderWeekly();renderEnergyBlocks();}
   if(p==='routine'){renderDayBlocks();renderDaySelector();renderRoutine();}
   if(p==='vision') renderVision();
+  if(p==='principles') fillSimpleFields();
   if(p==='todo') renderTodos();
   setTimeout(initAutoResize, 50);
 }
