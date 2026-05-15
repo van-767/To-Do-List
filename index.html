@@ -556,6 +556,23 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   /* input font-size stays 16px to prevent iOS zoom */
   input[type=text],input[type=number],input[type=date],input[type=time],textarea,select{font-size:16px!important}
 }
+/* ── PRINCIPLES ── */
+.prin-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.prin-section-title{display:flex;align-items:center;gap:10px}
+.prin-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.prin-reason-item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--s2);border-radius:var(--r-sm);border:1px solid transparent;margin-bottom:8px;transition:border-color var(--tr),background var(--tr),box-shadow var(--tr)}
+.prin-reason-item:focus-within{background:#fff;border-color:#F43F5E44;box-shadow:0 0 0 3px #F43F5E18}
+.prin-reason-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.prin-reason-item textarea{flex:1;border:none;background:transparent;font-size:14px;line-height:1.65;color:var(--t1);outline:none;min-height:44px;resize:none;overflow:hidden}
+.prin-do-item,.prin-not-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--r-sm);border:1px solid transparent;margin-bottom:7px;transition:border-color var(--tr),background var(--tr),box-shadow var(--tr)}
+.prin-do-item{background:color-mix(in srgb,var(--green) 8%,var(--s2))}
+.prin-do-item:focus-within{background:color-mix(in srgb,var(--green) 12%,#fff);border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 15%,transparent)}
+.prin-not-item{background:color-mix(in srgb,var(--coral) 8%,var(--s2))}
+.prin-not-item:focus-within{background:color-mix(in srgb,var(--coral) 12%,#fff);border-color:var(--coral);box-shadow:0 0 0 3px color-mix(in srgb,var(--coral) 15%,transparent)}
+.prin-do-dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px}
+.prin-not-dot{width:10px;height:10px;border-radius:50%;background:var(--coral);flex-shrink:0;margin-top:5px}
+.prin-do-item textarea,.prin-not-item textarea{flex:1;border:none;background:transparent;font-size:13px;line-height:1.6;color:var(--t1);outline:none;min-height:36px;resize:none;overflow:hidden}
+.prin-empty{text-align:center;padding:28px 0;color:var(--t3);font-size:13px}
 </style>
 </head>
 <body>
@@ -1152,21 +1169,49 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
 <!-- ══ PRINCIPLES ══ -->
 <div class="page" id="p-principles">
   <div class="ph"><div class="pe">Nền tảng</div><div class="pt">Principles</div><div class="pd">Lý do sâu xa, cam kết với bản thân, và những thứ cần tránh — đọc lại khi mệt mỏi hoặc mất phương hướng.</div></div>
-  <div class="card" style="border-left:3px solid #F43F5E">
-    <div class="ct" style="margin-bottom:14px"><span style="font-size:18px;margin-right:8px">❤️</span><span>Reasons — Tại sao tôi làm tất cả điều này?</span></div>
-    <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Đây là lý do sâu xa nhất. Nhìn lại khi mệt mỏi, khi muốn bỏ cuộc, khi quên đi mình đang đi đâu.</p>
-    <textarea id="per-reasons" placeholder="Viết ra lý do thực sự của mình... Tại sao tôi cố gắng mỗi ngày? Điều gì quan trọng nhất với tôi? Tôi đang xây dựng cuộc sống như thế nào?" style="min-height:140px;font-size:14px;line-height:1.7;border-color:#F43F5E;border-width:1.5px"></textarea>
-  </div>
-  <div class="g2" style="gap:14px">
-    <div class="card" style="margin:0;border-left:3px solid var(--green)">
-      <div class="ct" style="margin-bottom:10px"><span style="font-size:16px;margin-right:8px">✅</span><span>Should do</span></div>
-      <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Những việc tôi cam kết làm — thói quen, hành động, cách sống.</p>
-      <textarea id="per-should-do" placeholder="- Tập thể dục mỗi ngày&#10;- Đọc sách 30 phút&#10;- Viết journal buổi tối&#10;..." style="min-height:160px"></textarea>
+
+  <!-- REASONS -->
+  <div class="card" style="border-top:3px solid #F43F5E;padding-top:18px">
+    <div class="prin-section-hd">
+      <div class="prin-section-title">
+        <div class="prin-icon" style="background:linear-gradient(135deg,#F43F5E22,#FB718522)">❤️</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--t1)">Reasons</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:1px">Tại sao tôi làm tất cả điều này?</div>
+        </div>
+      </div>
+      <button class="btn btn-a" style="font-size:12px" onclick="addReason()">+ Thêm</button>
     </div>
-    <div class="card" style="margin:0;border-left:3px solid var(--coral)">
-      <div class="ct" style="margin-bottom:10px"><span style="font-size:16px;margin-right:8px">🚫</span><span>Should not do</span></div>
-      <p style="font-size:12px;color:var(--t3);margin-bottom:10px">Những thứ tôi cần tránh — distraction, thói xấu, hành vi phá hoại.</p>
-      <textarea id="per-should-not" placeholder="- Lướt mạng xã hội vô mục đích&#10;- Trì hoãn việc quan trọng&#10;- So sánh bản thân với người khác&#10;..." style="min-height:160px"></textarea>
+    <div id="reasons-list"></div>
+  </div>
+
+  <!-- SHOULD DO / SHOULD NOT -->
+  <div class="g2" style="gap:14px">
+    <div class="card" style="margin:0;border-top:3px solid var(--green);padding-top:18px">
+      <div class="prin-section-hd">
+        <div class="prin-section-title">
+          <div class="prin-icon" style="background:color-mix(in srgb,var(--green) 15%,transparent)">✅</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--t1)">Should do</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:1px">Cam kết với bản thân</div>
+          </div>
+        </div>
+        <button class="btn btn-a" style="font-size:12px" onclick="addShouldDo()">+ Thêm</button>
+      </div>
+      <div id="should-do-list"></div>
+    </div>
+    <div class="card" style="margin:0;border-top:3px solid var(--coral);padding-top:18px">
+      <div class="prin-section-hd">
+        <div class="prin-section-title">
+          <div class="prin-icon" style="background:color-mix(in srgb,var(--coral) 15%,transparent)">🚫</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--t1)">Should not do</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:1px">Những thứ cần tránh xa</div>
+          </div>
+        </div>
+        <button class="btn btn-a" style="font-size:12px" onclick="addShouldNot()">+ Thêm</button>
+      </div>
+      <div id="should-not-list"></div>
     </div>
   </div>
 </div>
@@ -1201,7 +1246,7 @@ function today(){return dateStr(new Date())}
 let D = {
   eco:{income:'',expense:'',savings:'',invest:'',vision:'',why:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',obj2:'',kr2a:'',kr2b:'',objectives:[]},
   things:[],
-  per:{vision:'',ww:'',wo:'',ob:'',pl:'',reasons:'',should_do:'',should_not:'',obj1:'',kr1a:'',kr1b:'',kr1c:'',objectives:[],skills:[],books:[]},
+  per:{vision:'',ww:'',wo:'',ob:'',pl:'',reasons:[],should_do:[],should_not:[],obj1:'',kr1a:'',kr1b:'',kr1c:'',objectives:[],skills:[],books:[]},
   weekly:{m1:'',m2:'',m3:'',if1:'',th1:'',if2:'',th2:'',if3:'',th3:'',energy:[{id:'e1',type:'peak',from:'06:00',to:'10:00',label:''},{id:'e2',type:'low',from:'14:00',to:'16:00',label:''}],note:'',mits:[''],rules:[{if:'',then:''}]},
   routine:[
     {id:'r1',time:'6:00',label:'Thức dậy — morning routine',type:'health'},
@@ -1259,7 +1304,6 @@ function collectSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
-    'per-reasons':'per.reasons','per-should-do':'per.should_do','per-should-not':'per.should_not',
     'non-neg':'nonneg',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
@@ -1283,7 +1327,6 @@ function fillSimpleFields(){
     'eco-income':'eco.income','eco-expense':'eco.expense','eco-savings':'eco.savings','eco-invest':'eco.invest',
     'eco-vision':'eco.vision','eco-why':'eco.why',
     'per-vision':'per.vision','per-ww':'per.ww','per-wo':'per.wo','per-ob':'per.ob','per-pl':'per.pl',
-    'per-reasons':'per.reasons','per-should-do':'per.should_do','per-should-not':'per.should_not',
     'non-neg':'nonneg',
     'v-life10':'vision.life10','v-5eco':'vision.y5eco','v-5per':'vision.y5per','v-5things':'vision.y5things'
   };
@@ -1329,7 +1372,14 @@ function normalizeData(){
   D.things = D.things||[];
   D.journals = D.journals||{};
   D.eco = Object.assign({objectives:[]}, D.eco||{});
-  D.per = Object.assign({objectives:[],skills:[],books:[],reasons:'',should_do:'',should_not:''}, D.per||{});
+  D.per = Object.assign({objectives:[],skills:[],books:[],reasons:[],should_do:[],should_not:[]}, D.per||{});
+  // migrate old string → array
+  if(typeof D.per.reasons==='string') D.per.reasons = D.per.reasons ? [{text:D.per.reasons}] : [];
+  if(typeof D.per.should_do==='string') D.per.should_do = D.per.should_do ? D.per.should_do.split('\n').filter(Boolean).map(t=>({text:t})) : [];
+  if(typeof D.per.should_not==='string') D.per.should_not = D.per.should_not ? D.per.should_not.split('\n').filter(Boolean).map(t=>({text:t})) : [];
+  if(!Array.isArray(D.per.reasons)) D.per.reasons=[];
+  if(!Array.isArray(D.per.should_do)) D.per.should_do=[];
+  if(!Array.isArray(D.per.should_not)) D.per.should_not=[];
   D.eco.objectives = migrateObjectives('eco');
   D.per.objectives = migrateObjectives('per');
   D.retros = D.retros||{};
@@ -1412,7 +1462,7 @@ function nav(p){
   if(p==='weekly'){renderWeekly();renderEnergyBlocks();}
   if(p==='routine'){renderDayBlocks();renderDaySelector();renderRoutine();}
   if(p==='vision') renderVision();
-  if(p==='principles') fillSimpleFields();
+  if(p==='principles') renderPrinciples();
   if(p==='todo') renderTodos();
   setTimeout(initAutoResize, 50);
 }
@@ -1820,6 +1870,48 @@ function fmtWishCost(el,id){
   try{el.setSelectionRange(pos+diff,pos+diff);}catch(e){}
   if(id)updateWishField(id,'cost',el.value);
 }
+
+// ── PRINCIPLES ──
+function renderPrinciples(){renderReasons();renderShouldDo();renderShouldNot();}
+function renderReasons(){
+  const el=document.getElementById('reasons-list');
+  if(!el)return;
+  if(!D.per.reasons.length){el.innerHTML='<div class="prin-empty">Chưa có lý do nào. Hãy thêm lý do sâu xa của bạn.</div>';return;}
+  el.innerHTML=D.per.reasons.map((r,i)=>`
+    <div class="prin-reason-item">
+      <div class="prin-reason-num">${i+1}</div>
+      <textarea oninput="D.per.reasons[${i}].text=this.value;save();autoResize(this)" placeholder="Lý do của tôi...">${escapeHtml(r.text||'')}</textarea>
+      <button class="btn-del" onclick="D.per.reasons.splice(${i},1);save();renderReasons()">✕</button>
+    </div>`).join('');
+  setTimeout(()=>el.querySelectorAll('textarea').forEach(t=>autoResize(t)),0);
+}
+function addReason(){D.per.reasons.push({text:''});save();renderReasons();setTimeout(()=>{const ls=document.querySelectorAll('#reasons-list textarea');if(ls.length)ls[ls.length-1].focus();},50);}
+function renderShouldDo(){
+  const el=document.getElementById('should-do-list');
+  if(!el)return;
+  if(!D.per.should_do.length){el.innerHTML='<div class="prin-empty">Chưa có cam kết nào.</div>';return;}
+  el.innerHTML=D.per.should_do.map((r,i)=>`
+    <div class="prin-do-item">
+      <div class="prin-do-dot"></div>
+      <textarea oninput="D.per.should_do[${i}].text=this.value;save();autoResize(this)" placeholder="Tôi cam kết...">${escapeHtml(r.text||'')}</textarea>
+      <button class="btn-del" onclick="D.per.should_do.splice(${i},1);save();renderShouldDo()">✕</button>
+    </div>`).join('');
+  setTimeout(()=>el.querySelectorAll('textarea').forEach(t=>autoResize(t)),0);
+}
+function addShouldDo(){D.per.should_do.push({text:''});save();renderShouldDo();setTimeout(()=>{const ls=document.querySelectorAll('#should-do-list textarea');if(ls.length)ls[ls.length-1].focus();},50);}
+function renderShouldNot(){
+  const el=document.getElementById('should-not-list');
+  if(!el)return;
+  if(!D.per.should_not.length){el.innerHTML='<div class="prin-empty">Chưa có gì để tránh.</div>';return;}
+  el.innerHTML=D.per.should_not.map((r,i)=>`
+    <div class="prin-not-item">
+      <div class="prin-not-dot"></div>
+      <textarea oninput="D.per.should_not[${i}].text=this.value;save();autoResize(this)" placeholder="Tôi sẽ tránh...">${escapeHtml(r.text||'')}</textarea>
+      <button class="btn-del" onclick="D.per.should_not.splice(${i},1);save();renderShouldNot()">✕</button>
+    </div>`).join('');
+  setTimeout(()=>el.querySelectorAll('textarea').forEach(t=>autoResize(t)),0);
+}
+function addShouldNot(){D.per.should_not.push({text:''});save();renderShouldNot();setTimeout(()=>{const ls=document.querySelectorAll('#should-not-list textarea');if(ls.length)ls[ls.length-1].focus();},50);}
 
 // ── PERSONAL DEV ──
 function renderPersonal(){
