@@ -2113,7 +2113,7 @@ function deleteSub(tid,si){const t=D.todos.find(x=>x.id===tid);if(t){t.subs.spli
 const _notifiedBlocks = new Set();
 let _blockTick, _reasonsTick;
 const VAPID_KEY = 'BOpaPnsaC77ldal_PExQ_W5ie5zdd4sheDQkCZ_h5byieOCZNtZWyoQrCSMEwdzUXuDd6vFYddlnzkkycuzOJu0';
-const WORKER_URL = ''; // filled after Cloudflare Worker is deployed
+const WORKER_URL = 'https://mygoals-notif.van767-1973.workers.dev';
 
 function notifPerm(){return('Notification' in window)?Notification.permission:'denied';}
 
