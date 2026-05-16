@@ -564,9 +564,10 @@ textarea{min-height:72px;line-height:1.5;resize:none;overflow:hidden;}
   .todo-chk,.focus-check,.hz-check{width:24px;height:24px;border-radius:7px}
   .tf{min-height:40px;padding:8px 14px}
   .btn-del{min-height:40px;padding:6px 12px}
-  /* routine row — stack type selector below time on very small screen */
-  .routine-row{grid-template-columns:60px 1fr auto auto;grid-template-rows:auto auto}
-  .routine-type{grid-column:1 / -1;border-right:none;border-top:1px solid var(--bd)}
+  /* routine row — time+type+controls on row 1, label full width on row 2 */
+  .routine-row{grid-template-columns:68px 1fr auto auto;grid-template-rows:auto auto}
+  .routine-type{border-right:1px solid var(--bd)}
+  .routine-label{grid-column:1 / -1;border-top:1px solid var(--bd);padding:10px 14px}
   /* fin summary — 2 columns instead of 3 */
   .fin-summary{flex-direction:row;flex-wrap:wrap}
   .fin-chip{min-width:calc(50% - 4px)}
